@@ -11,13 +11,17 @@
 #include <misc.h>
 #include <constant.h>
 #include <map.h>
-
+// Variables
 struct player {
 	int x, y;
 	enum direction direction;
 	int bombs;
 };
 
+////////////////// Fonctions////////////////////
+
+
+// Fonction qui initialise le player
 struct player* player_init(int bombs) {
 	struct player* player = malloc(sizeof(*player));
 	if (!player)
@@ -29,24 +33,26 @@ struct player* player_init(int bombs) {
 	return player;
 }
 
-
+// Fonction qui initialise la position du player x, y
 void player_set_position(struct player *player, int x, int y) {
 	assert(player);
 	player->x = x;
 	player->y = y;
 }
 
-
+// Fonction qui déalloue la mémoire du pointeur player
 void player_free(struct player* player) {
 	assert(player);
 	free(player);
 }
 
+// Fonction qui récupère position x
 int player_get_x(struct player* player) {
 	assert(player != NULL);
 	return player->x;
 }
 
+// Fonction qui récupère position y
 int player_get_y(struct player* player) {
 	assert(player != NULL);
 	return player->y;

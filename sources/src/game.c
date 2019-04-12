@@ -15,10 +15,10 @@ struct game {
 	short levels;        // nb maps of the game
 	short level;
 	struct player* player;
-};
+}; // struture de la carte
 
-struct game*
-game_new(void) {
+// Fonction qui renvoie une nouvelle map initialiser
+struct game* game_new(void) {
 	sprite_load(); // load sprites into process memory
 
 	struct game* game = malloc(sizeof(*game));
@@ -32,7 +32,10 @@ game_new(void) {
 	player_set_position(game->player, 1, 0);
 
 	return game;
-}
+
+} // initialisation du jeu
+
+
 
 void game_free(struct game* game) {
 	assert(game);
@@ -82,7 +85,7 @@ void game_banner_display(struct game* game) {
 
 	x = 3 * white_bloc + 5 * SIZE_BLOC;
 	window_display_image(sprite_get_number(3), x, y);
-}
+} // creation de la bannière
 
 void game_display(struct game* game) {
 	assert(game);
@@ -95,10 +98,10 @@ void game_display(struct game* game) {
 	window_refresh();
 }
 
-static short input_keyboard(struct game* game, int timer) {
-	SDL_Event event;
-	struct player* player = game_get_player(game);
-	struct map* map = game_get_current_map(game);
+static short input_keyboard(struct game* game, int timer) { // recupère les entrées clavier et agit en fonction !! comprend pas encore toutes les actions
+	SDL_Event event; // structure qui permet de lire les événements du pc
+	struct player* player = game_get_player(game); // récupère les infos du player
+	struct map* map = game_get_current_map(game);	// récupère les infos de la map
 	int x, y;
 	for (int i = 0; i < 12; i++) {
 	  for (int j = 0; j < 12; j++) {
@@ -108,27 +111,7 @@ static short input_keyboard(struct game* game, int timer) {
 	}
 	int i = player_get_x(game->player);
 	int j = player_get_y(game->player);
-	while (SDL_PollEvent(&event)) {
-
-		switch (event.type){
-		case SDL_QUIT:
-			return 1;
-		case SDL_KEYDOWN:
-			switch (event.key.keysym.sym) {
-			case SDLK_ESCAPE:
-				return 1;
-			case SDLK_UP:
-				player_set_current_way(player, NORTH);
-				player_move(player, map);
-				break;
-			case SDLK_DOWN:
-				player_set_current_way(player, SOUTH);
-				player_move(player, map);
-				break;
-			case SDLK_RIGHT:
-				player_set_current_way(player, EAST);
-				player_move(player, map);
-				break;
+	while (SDL_PollEvent(&event)) { // SDL_PollEvent permet de lire les events dans la queueet agit en fonction
 			case SDLK_LEFT:
 				player_set_current_way(player, WEST);
 				player_move(player, map);

@@ -16,7 +16,7 @@ void window_create(int width, int height) {
 	SDL_WM_SetCaption(WINDOW_NAME, NULL );
 	window = SDL_SetVideoMode(width, height, 0, // If bits-per-pixel is 0, it is treated as the current display bits per pixel.
 			SDL_HWSURFACE);
-
+// SDL_HWSURFACE utilise la mémoire de la CG
 	if (window == NULL ) {
 		error("Can't set video mode: %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
@@ -34,7 +34,7 @@ void window_display_image(SDL_Surface* sprite, int x, int y) {
 	SDL_BlitSurface(sprite, NULL, window, &place);
 }
 
-void window_clear() {
+void window_clear() { // Affiche 
 	assert(window);
 	SDL_FillRect(window, NULL, SDL_MapRGB(window->format, 255, 255, 255));
 }

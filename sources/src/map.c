@@ -127,6 +127,7 @@ void display_bomb(struct map* map, int x ,int y , unsigned char type) {
  		break;
 	}
 }
+
 void display_door(struct map* map, int x, int  y){
 			if (map-> door_closed)
 			window_display_image(sprite_get_door_closed() ,x ,y);
@@ -185,10 +186,13 @@ void map_display(struct map* map)
 	  }
 	}
 }
+
 void map_open_door(struct map* map){
 	if (map->door_closed)
 		map->door_closed = 0;
 }
+
+
 int door_is_closed(struct map* map){
 	if (map->door_closed)
 		return 1;
