@@ -2,23 +2,26 @@
  * This file is part of Bombeirb.
  * Copyright (C) 2018 by Laurent Réveillère
  ******************************************************************************/
+ //////////////// Bibliothèques ////////////////
+
 #include <SDL/SDL_image.h>
 #include <assert.h>
-
 #include <player.h>
 #include <sprite.h>
 #include <window.h>
 #include <misc.h>
 #include <constant.h>
 #include <map.h>
-// Variables
+
+////////////////// Variables ////////////////////
+
 struct player {
 	int x, y;
 	enum direction direction;
 	int bombs;
-};
+}; //
 
-////////////////// Fonctions////////////////////
+////////////////// Fonctions ////////////////////
 
 
 // Fonction qui initialise le player
@@ -58,26 +61,31 @@ int player_get_y(struct player* player) {
 	return player->y;
 }
 
+// Fonction qui met la position du joeur
 void player_set_current_way(struct player* player, enum direction way) {
 	assert(player);
 	player->direction = way;
 }
 
+// Fonction qui récupère le nombre de bombs
 int player_get_nb_bomb(struct player* player) {
 	assert(player);
 	return player->bombs;
 }
 
+// Fonction qui incrémente le nombre de bombe
 void player_inc_nb_bomb(struct player* player) {
 	assert(player);
 	player->bombs += 1;
 }
 
+// Fonction qui décrémente le nombre de bombe
 void player_dec_nb_bomb(struct player* player) {
 	assert(player);
 	player->bombs -= 1;
 }
 
+// Fonctions qui dépose une bombe voir mohammed pas fini problèmes
 void  player_drop_bomb(struct player* player, struct map* map,int timer,int x, int y){
 	//player_dec_nb_bomb(player);
 	map_set_cell_type(map,x,y,CELL_BOMB_4);
@@ -104,6 +112,8 @@ void  player_drop_bomb(struct player* player, struct map* map,int timer,int x, i
 		return 0;
 	}
 }*/
+
+// Fonction qui permet de déplacer une boite
 void player_move_case_box(struct player* player, struct map* map, int x, int y){
 	if (player->direction == NORTH  && map_get_cell_type(map,x,y-1)==CELL_EMPTY) {
 		if(map_is_inside(map,x,y-1)){
@@ -136,6 +146,7 @@ void player_move_case_box(struct player* player, struct map* map, int x, int y){
 	}
 }
 
+// Fonction qui permet
 int player_move_aux(struct player* player, struct map* map, int x, int y) {
 
 	if (!map_is_inside(map, x, y))
@@ -171,6 +182,7 @@ int player_move_aux(struct player* player, struct map* map, int x, int y) {
 	return 1;
 }
 
+// Fonction qui affecte la nouvelle position x,y grace a la direction
 int player_move(struct player* player, struct map* map) {
 	int x = player->x;
 	int y = player->y;
@@ -212,6 +224,7 @@ int player_move(struct player* player, struct map* map) {
 	return move;
 }
 
+// Fonction qui affiche la bonne image du player en fonction de son orientation
 void player_display(struct player* player) {
 	assert(player);
 	window_display_image(sprite_get_player(player->direction),

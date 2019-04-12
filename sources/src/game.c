@@ -2,22 +2,27 @@
  * This file is part of Bombeirb.
  * Copyright (C) 2018 by Laurent Réveillère
  ******************************************************************************/
+ //////////////// Bibliothèques ////////////////
+
 #include <assert.h>
 #include <time.h>
-
 #include <game.h>
 #include <misc.h>
 #include <window.h>
 #include <sprite.h>
+
+////////////////// Variables ////////////////////
 
 struct game {
 	struct map** maps;       // the game's map
 	short levels;        // nb maps of the game
 	short level;
 	struct player* player;
-}; // struture de la carte
+}; // struture du game
 
-// Fonction qui renvoie une nouvelle map initialiser
+////////////////// Fonctions ////////////////////
+
+// Fonction qui crée une nouvelle map
 struct game* game_new(void) {
 	sprite_load(); // load sprites into process memory
 
@@ -33,10 +38,10 @@ struct game* game_new(void) {
 
 	return game;
 
-} // initialisation du jeu
+}
+// initialisation du jeu
 
-
-
+// Fonction qui libère toutes les variables de game
 void game_free(struct game* game) {
 	assert(game);
 
@@ -45,17 +50,19 @@ void game_free(struct game* game) {
 		map_free(game->maps[i]);
 }
 
+// Fonction Comprend pas encore
 struct map* game_get_current_map(struct game* game) {
 	assert(game);
 	return game->maps[game->level];
 }
 
-
+// Fonction qui prend la structure de la map et renvoie celle du player
 struct player* game_get_player(struct game* game) {
 	assert(game);
 	return game->player;
 }
 
+// Fonction qui affiche la bannière
 void game_banner_display(struct game* game) {
 	assert(game);
 
@@ -85,8 +92,9 @@ void game_banner_display(struct game* game) {
 
 	x = 3 * white_bloc + 5 * SIZE_BLOC;
 	window_display_image(sprite_get_number(3), x, y);
-} // creation de la bannière
+}
 
+// Fonction Principale d'affichage
 void game_display(struct game* game) {
 	assert(game);
 
@@ -98,6 +106,7 @@ void game_display(struct game* game) {
 	window_refresh();
 }
 
+// Fonction qui detecte les touches et agit en fonction
 static short input_keyboard(struct game* game, int timer) { // recupère les entrées clavier et agit en fonction !! comprend pas encore toutes les actions
 	SDL_Event event; // structure qui permet de lire les événements du pc
 	struct player* player = game_get_player(game); // récupère les infos du player
@@ -112,6 +121,25 @@ static short input_keyboard(struct game* game, int timer) { // recupère les ent
 	int i = player_get_x(game->player);
 	int j = player_get_y(game->player);
 	while (SDL_PollEvent(&event)) { // SDL_PollEvent permet de lire les events dans la queueet agit en fonction
+		switch (event.type){
+		case SDL_QUIT:
+			return 1;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym) {
+			case SDLK_ESCAPE:
+				return 1;
+			case SDLK_UP:
+				player_set_current_way(player, NORTH);
+				player_move(player, map);
+				break;
+			case SDLK_DOWN:
+				player_set_current_way(player, SOUTH);
+				player_move(player, map);
+				break;
+			case SDLK_RIGHT:
+				player_set_current_way(player, EAST);
+				player_move(player, map);
+				break;
 			case SDLK_LEFT:
 				player_set_current_way(player, WEST);
 				player_move(player, map);
@@ -131,6 +159,7 @@ static short input_keyboard(struct game* game, int timer) { // recupère les ent
 	return 0;
 }
 
+// Fonction ????
 int game_update(struct game* game, int timer) {
 	if (input_keyboard(game, timer))
 		return 1; // exit game
