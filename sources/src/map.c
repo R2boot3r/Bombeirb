@@ -14,6 +14,8 @@
 #include <sprite.h>
 #include <window.h>
 
+////////////////// Variables/Structures ////////////////////
+
 struct map {
 	int width;
 	int height;
@@ -23,7 +25,13 @@ struct map {
 
 #define CELL(i,j) ( (i) + (j) * map->width)
 
-struct map* map_new(int width, int height)
+
+
+////////////////// Fonctions ////////////////////
+
+
+// Fonction qui crée une nouvelle map au debut du jeu
+struct map* map_new(int width, int height) //
 {
 	assert(width > 0 && height > 0);
 
@@ -49,6 +57,7 @@ struct map* map_new(int width, int height)
 	return map;
 }
 
+// Fonction qui permet de vérifier si le player est dans la map
 int map_is_inside(struct map* map, int x, int y)
 {
 	assert(map);
@@ -57,6 +66,7 @@ int map_is_inside(struct map* map, int x, int y)
 	else return 0;
 }
 
+// Fonction qui libère le pointeur map
 void map_free(struct map *map)
 {
 	if (map == NULL )
@@ -65,30 +75,35 @@ void map_free(struct map *map)
 	free(map);
 }
 
+// Fonction qui récupère la largeur de la map
 int map_get_width(struct map* map)
 {
 	assert(map != NULL);
 	return map->width;
 }
 
+// Fonction qui récupère la hauteur de la map
 int map_get_height(struct map* map)
 {
 	assert(map);
 	return map->height;
 }
 
+// A voir
 enum cell_type map_get_cell_type(struct map* map, int x, int y)
 {
 	//assert(map && map_is_inside(map, x, y));
 	return map->grid[CELL(x,y)] & 0xf0;
 }
 
+// A voir
 void map_set_cell_type(struct map* map, int x, int y, enum cell_type type)
 {
 	assert(map && map_is_inside(map, x, y));
 	map->grid[CELL(x,y)] = type;
 }
 
+// Fonction qui modifie les bonus de bombs
 void display_bonus(struct map* map, int x, int y, unsigned char type)
 {
 	// bonus is encoded with the 4 most significant bits
@@ -110,6 +125,8 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 		break;
 	}
 }
+
+// Fonction qui  Affiche la bonne image de bomb
 void display_bomb(struct map* map, int x ,int y , unsigned char type) {
 	int last_time=0;
 	switch (type & 0x0f) {
@@ -128,6 +145,7 @@ void display_bomb(struct map* map, int x ,int y , unsigned char type) {
 	}
 }
 
+// Fonction qui affiche si la porte est ouverte ou non
 void display_door(struct map* map, int x, int  y){
 			if (map-> door_closed)
 			window_display_image(sprite_get_door_closed() ,x ,y);
@@ -135,7 +153,7 @@ void display_door(struct map* map, int x, int  y){
 			window_display_image(sprite_get_door_opened() ,x ,y);
 }
 
-
+// Fonction qui affiche le décor arbre ou roches ? ac compresser avec le reste ?
 void display_scenery(struct map* map, int x, int  y, unsigned char type)
 {
 	switch (type & 0x0f) { // sub-types are encoded with the 4 less significant bits
@@ -148,7 +166,7 @@ void display_scenery(struct map* map, int x, int  y, unsigned char type)
 		break;
 	}
 }
-
+// Fonction ui affiche les éléments de la maps
 void map_display(struct map* map)
 {
 	assert(map != NULL);
@@ -187,12 +205,13 @@ void map_display(struct map* map)
 	}
 }
 
+// Fonction qu permet d'ouvrir une porte
 void map_open_door(struct map* map){
 	if (map->door_closed)
 		map->door_closed = 0;
 }
 
-
+// Fonction qui regarde si la porte est fermé
 int door_is_closed(struct map* map){
 	if (map->door_closed)
 		return 1;
@@ -200,12 +219,15 @@ int door_is_closed(struct map* map){
 		return 0;
 }
 
-struct map* map_get_static(void)
+// Fonction qui permet d'affecter une carte a la map
+// A modifier faire eune seul fonction correcte pck la c pas top
+// en entré metre la carte et en sortie tj la structure map element grid
+struct map* map_get_static_1(void)
 {
 	struct map* map = map_new(STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT);
 
 	unsigned char themap[STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT] = {
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
+	  CELL_EMPTY, 17, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
 	  CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
 	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
@@ -218,6 +240,33 @@ struct map* map_get_static(void)
 	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX_LIFE, CELL_EMPTY,
 	  CELL_BOX,  CELL_EMPTY, CELL_DOOR, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
 		};
+
+
+	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
+		map->grid[i] = themap[i];
+	
+	return map;
+}
+
+struct map* map_get_static_2(void)
+{
+	struct map* map = map_new(STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT);
+
+	unsigned char themap[STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT] = {
+	  CELL_EMPTY, 17, 17, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
+	  CELL_STONE, CELL_STONE, CELL_STONE, CELL_TREE, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
+	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
+	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
+	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
+	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
+	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY , CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
+	  CELL_EMPTY, CELL_TREE, CELL_BOX, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
+	  CELL_BOX, CELL_EMPTY, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
+	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
+	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX_LIFE, CELL_EMPTY,
+	  CELL_BOX,  CELL_EMPTY, CELL_DOOR, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
+		};
+
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
 		map->grid[i] = themap[i];

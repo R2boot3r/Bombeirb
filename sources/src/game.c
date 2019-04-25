@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * This file is part of Bombeirb.
  * Copyright (C) 2018 by Laurent Réveillère
  ******************************************************************************/
@@ -8,29 +8,28 @@
 #include <time.h>
 #include <game.h>
 #include <misc.h>
-#include <window.h>
-#include <sprite.h>
+
 
 ////////////////// Variables ////////////////////
 
 struct game {
 	struct map** maps;       // the game's map
 	short levels;        // nb maps of the game
-	short level;
 	struct player* player;
 }; // struture du game
 
 ////////////////// Fonctions ////////////////////
 
-// Fonction qui crée une nouvelle map
+// Fonction qui crée une nouvelle game
 struct game* game_new(void) {
 	sprite_load(); // load sprites into process memory
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
-	game->maps[0] = map_get_static();
-	game->levels = 1;
-	game->level = 0;
+	game->maps[0] = map_get_static_1();
+	game->maps[1] = map_get_static_2();
+	game->levels = 2;
+	//game->level = 0;
 
 	game->player = player_init(3);
 	// Set default location of the player
@@ -39,9 +38,10 @@ struct game* game_new(void) {
 	return game;
 
 }
+
 // initialisation du jeu
 
-// Fonction qui libère toutes les variables de game
+// Fonction qui libère toutes les variables de game ATT voir pour maps
 void game_free(struct game* game) {
 	assert(game);
 
@@ -50,17 +50,23 @@ void game_free(struct game* game) {
 		map_free(game->maps[i]);
 }
 
-// Fonction Comprend pas encore
-struct map* game_get_current_map(struct game* game) {
-	assert(game);
-	return game->maps[game->level];
-}
 
 // Fonction qui prend la structure de la map et renvoie celle du player
 struct player* game_get_player(struct game* game) {
 	assert(game);
 	return game->player;
 }
+
+
+// Fonction qui permet de selectionner la bonne carte en fonction du level
+struct map* game_get_current_map(struct game* game) {
+	assert(game);
+	struct player* player = game_get_player(game);
+
+	return game->maps[player_return_level(player)];
+}
+
+
 
 // Fonction qui affiche la bannière
 void game_banner_display(struct game* game) {
@@ -106,6 +112,9 @@ void game_display(struct game* game) {
 	window_refresh();
 }
 
+
+
+
 // Fonction qui detecte les touches et agit en fonction
 static short input_keyboard(struct game* game, int timer) { // recupère les entrées clavier et agit en fonction !! comprend pas encore toutes les actions
 	SDL_Event event; // structure qui permet de lire les événements du pc
@@ -150,6 +159,13 @@ static short input_keyboard(struct game* game, int timer) { // recupère les ent
 						player_drop_bomb(player, map,timer,i,j);
 					}
 				break;
+
+			case SDLK_j:
+
+				break;
+			case SDLK_k:
+
+				break;
 			default:
 				break;
 			}
@@ -166,3 +182,16 @@ int game_update(struct game* game, int timer) {
 
 	return 0;
 }
+
+
+// Fonction qui permet de changer de map
+/*void map_change(struct game* game, int x) {
+	if(x == 1){
+		game->maps[0] = map_get_static_1();
+		printf(map_get_static_1());
+	}
+	if (x == 0){
+		game->maps[0] = map_get_static_2();
+	}
+
+}*/

@@ -7,6 +7,8 @@
 
 #include <player.h>
 #include <map.h>
+#include <window.h>
+#include <sprite.h>
 
 // Abstract data type
 struct game;
@@ -28,5 +30,8 @@ void game_display(struct game* game);
 
 // update
 int game_update(struct game* game, int timer);
+
+// Fonction qui permet de changer de map
+void map_change(struct game* game, int x);
 
 #endif /* GAME_H_ */

@@ -39,4 +39,6 @@ int player_move(struct player* player, struct map* map);
 // Display the player on the screen
 void player_display(struct player* player);
 
+int player_return_level(struct player* player);
+
 #endif /* PLAYER_H_ */

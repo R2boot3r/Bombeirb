@@ -62,7 +62,7 @@ struct map;
 // Create a new empty map
 struct map* map_new(int width, int height);
 void map_free(struct map* map);
-
+//
 
 // Return the height and width of a map
 int map_get_width(struct map* map);
@@ -78,10 +78,13 @@ void  map_set_cell_type(struct map* map, int x, int y, enum cell_type type);
 int map_is_inside(struct map* map, int x, int y);
 
 // Return a default static map
-struct map* map_get_static();
+struct map* map_get_static_1();
+struct map* map_get_static_2();
 
 // Display the map on the screen
 void map_display(struct map* map);
 // test if the door is open or NOT
 int door_is_closed(struct map* map);
+
+
 #endif /* MAP_H_ */

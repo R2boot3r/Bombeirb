@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * This file is part of Bombeirb.
  * Copyright (C) 2018 by Laurent Réveillère
@@ -19,6 +20,7 @@ struct player {
 	int x, y;
 	enum direction direction;
 	int bombs;
+	short level;
 }; //
 
 ////////////////// Fonctions ////////////////////
@@ -32,6 +34,7 @@ struct player* player_init(int bombs) {
 
 	player->direction = NORTH;
 	player->bombs = bombs;
+	player->level = 0;
 
 	return player;
 }
@@ -113,7 +116,9 @@ void  player_drop_bomb(struct player* player, struct map* map,int timer,int x, i
 	}
 }*/
 
-// Fonction qui permet de déplacer une boite
+
+
+// Fonction qui permet de déplacer une boite (a comprésser après) j'aime pas du tout la logique de la fonction
 void player_move_case_box(struct player* player, struct map* map, int x, int y){
 	if (player->direction == NORTH  && map_get_cell_type(map,x,y-1)==CELL_EMPTY) {
 		if(map_is_inside(map,x,y-1)){
@@ -146,7 +151,7 @@ void player_move_case_box(struct player* player, struct map* map, int x, int y){
 	}
 }
 
-// Fonction qui permet
+// Fonction qui permet d'agir en fonction du d'élément qui se trouve sous le joeur (de même pour box move c pas terrible)
 int player_move_aux(struct player* player, struct map* map, int x, int y) {
 
 	if (!map_is_inside(map, x, y))
@@ -163,16 +168,19 @@ int player_move_aux(struct player* player, struct map* map, int x, int y) {
 		break;
 
 	case CELL_BONUS:
+		return 0;
 		break;
 
 	case CELL_MONSTER:
+		return 0;
 		break;
 	case CELL_KEY:
 		map_set_cell_type(map, x, y, CELL_EMPTY);
 		map_open_door(map);
-
+		return 0;
 	case CELL_DOOR:
-
+		player->level = player->level +1;
+		return 0;
 		break;
 	default:
 		break;
@@ -217,10 +225,10 @@ int player_move(struct player* player, struct map* map) {
 		}
 		break;
 	}
-
-	if (move) {
+// ca sert a rien
+/*	if (move) {
 		//map_set_cell_type(map, x, y, CELL_EMPTY);
-	}
+	}*/
 	return move;
 }
 
@@ -229,4 +237,8 @@ void player_display(struct player* player) {
 	assert(player);
 	window_display_image(sprite_get_player(player->direction),
 			player->x * SIZE_BLOC, player->y * SIZE_BLOC);
+}
+
+int player_return_level(struct player* player){
+	return player->level;
 }
