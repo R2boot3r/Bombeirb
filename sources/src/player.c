@@ -174,12 +174,15 @@ int player_move_aux(struct player* player, struct map* map, int x, int y) {
 	case CELL_MONSTER:
 		return 0;
 		break;
-	case CELL_KEY:
+	case CELL_KEY: // partie qui sert a ouvrir la porte lorsque le joeur a la clef
 		map_set_cell_type(map, x, y, CELL_EMPTY);
 		map_open_door(map);
 		return 0;
 	case CELL_DOOR:
-		player->level = player->level +1;
+		if (!door_is_closed(map)) // partie qui permet de changer de biveau et de voir si la porte est ouverte
+		{
+			player->level = player->level +1;
+		}
 		return 0;
 		break;
 	default:

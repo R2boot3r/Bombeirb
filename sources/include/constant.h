@@ -18,9 +18,9 @@
 #define DEFAULT_GAME_FPS 30
 
 // map size
-#define STATIC_MAP_WIDTH  12
+/*#define STATIC_MAP_WIDTH  12
 #define STATIC_MAP_HEIGHT 12
-
+*/
 enum direction {
 	NORTH = 0,
 	EAST,  // 1

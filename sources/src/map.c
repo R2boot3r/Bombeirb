@@ -13,6 +13,7 @@
 #include <misc.h>
 #include <sprite.h>
 #include <window.h>
+#include <get_map_info.h>
 
 ////////////////// Variables/Structures ////////////////////
 
@@ -244,7 +245,7 @@ struct map* map_get_static_1(void)
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
 		map->grid[i] = themap[i];
-	
+
 	return map;
 }
 

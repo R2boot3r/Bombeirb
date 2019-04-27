@@ -5,17 +5,17 @@
 CC = gcc
 
 SDLCFLAGS = `sdl-config  --cflags`
-SDLLDFLAGS = `sdl-config --libs` 
+SDLLDFLAGS = `sdl-config --libs`
 
 CFLAGS = -Wall -O0 -g -std=c99 -I../include/ $(SDLCFLAGS)
 LDFLAGS = $(SDLLDFLAGS) -lSDL_image
-DEPFLAGS = -I../include 
+DEPFLAGS = -I../include
 
 SRC  = $(wildcard $(SRCDIR)/*.c)
 OBJ  = $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-.PHONY: all 
-all : $(BINDIR)/$(EXEC) 
+.PHONY: all
+all : $(BINDIR)/$(EXEC)
 
 ifndef SRCDIR
 	$(error SRCDIR is not set)
@@ -37,9 +37,9 @@ $(BINDIR)/$(EXEC) : $(OBJ)
 	$(CC) -o $@ $(OBJ) $(LDFLAGS)
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c $(OBJDIR)/%.d
-	$(CC) -c $(CFLAGS) -o $@ $< 
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-$(OBJDIR)/%.d : $(SRCDIR)/%.c 
+$(OBJDIR)/%.d : $(SRCDIR)/%.c
 	$(CC) -MM $(DEPFLAGS) $< > $@
 
 -include $(SRC:%.c=%.d)
