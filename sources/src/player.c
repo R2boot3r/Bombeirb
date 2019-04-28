@@ -129,7 +129,7 @@ void player_move_case_box(struct player* player, struct map* map, int x, int y){
 	}
 	if (player->direction == SOUTH  && map_get_cell_type(map,x,y+1)==CELL_EMPTY ){
 			if(map_is_inside(map,x,y+1)){
-		map_set_cell_type(map , x, y,CELL_EMPTY);
+		(map , x, y,CELL_EMPTY);
 		map_set_cell_type(map , x, y+1,CELL_BOX);
 		player->y++;
 		}
