@@ -2,14 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+
 //#include <get_map_info.h>
 
-int  STATIC_MAP_WIDTH = 0; // Il faudra par la suite modifier le nom de c 2 variables
-int  STATIC_MAP_HEIGHT = 0;
+int  STATIC_MAP_WIDTH = 12; // Il faudra par la suite modifier le nom de c 2 variables
+int  STATIC_MAP_HEIGHT = 12;
 
 // A refaire moi même
 // fonction prise sur internet sur https://stackoverflow.com/questions/9210528/split-string-with-delimiters-in-c
 // Fonction qui permet de couper une chaine de caratère en plusieur morceaux renvoie un pointeur de pointeur
+
+
 char** str_split(char* a_str, const char a_delim)
 {
   char** result    = 0;
@@ -59,24 +62,19 @@ char** str_split(char* a_str, const char a_delim)
 }
 
 
-
-void main(){
-
+unsigned char chargement_carte(){
+  unsigned char themap[STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT];
   char *line_buf = NULL;
   size_t line_buf_size = 0;
   int line_count = 0;
   ssize_t line_size;
 
   FILE *file_to_read = fopen("../map/map_0","r");
-  FILE *file_to_write = fopen("../map/map_1", "w");
-
-
-  char** dimension; // pointeur de pointeur sur les éléments de dimension voir si mettre null
+  //FILE *file_to_write = fopen("../map/map_1", "w");
 
 
 
-
-  if(file_to_read == NULL || file_to_write == NULL){
+  if(file_to_read == NULL){
     printf("un fichier n'a pas voulue s'ouvrir! \n");
 
   }
@@ -91,37 +89,42 @@ void main(){
   {
     // incrémente la ligne
     line_count++;
-    //printf("%d\n",line_count);
 
-    if (line_count==1) // récupération de STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT a méliorer jusqu'a l'obtention du char :
+    if (line_count != 1)
     {
-      dimension = str_split(line_buf, ':'); // prise en compte qu'on att que 2 valeurs
-      STATIC_MAP_WIDTH =;
-      STATIC_MAP_HEIGHT = ;
 
-      if (dimension)
+      char** data_ligne;
+      data_ligne = str_split(line_buf, ' ');
+      int i;
+      if (data_ligne)
       {
-          int i;
-          for (i = 0; *(dimension + i); i++)
-          {
-              printf("month=[%s]\n", *(dimension+ i));
-              free(*(dimension + i));
-          }
-          printf("\n");
-          free(dimension);
+        for (i = 0; *(data_ligne + i); i++)
+        {
+
+          themap[i]=(atoi(*(data_ligne + i)));
+          free(*(data_ligne + i));
+        }
       }
-      //STATIC_MAP_WIDTH = (*dimension-'0'); // a modifier pas propre faire sortie de script
-      //STATIC_MAP_HEIGHT = (line_buf[2]-'0'); // demander au prof
+      free(data_ligne);
+    }
+
+    else // récupération de STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT a méliorer jusqu'a l'obtention du char :
+    {
+      char** dimension; // pointeur de pointeur sur les éléments de dimension voir si mettre null
+      dimension = str_split(line_buf, ':'); // prise en compte qu'on att que 2 valeurs
+      // rajouter un teste sur la longeur du pointeur pour voir qu'on att bien 2 chiffre et non plus  a faire
+      STATIC_MAP_WIDTH = (atoi(*(dimension)));    //STATIC_MAP_WIDTH = (**(dimension)-'0'); Voir avec le prof pk ca marche pas
+      STATIC_MAP_HEIGHT = (atoi(*(dimension+ 1)));   //STATIC_MAP_HEIGHT = (**(dimension+ 1)-'0');
+      free(dimension);
     }
 
 
-    //printf("%d\n",STATIC_MAP_WIDTH);
-    //printf("%d\n",STATIC_MAP_HEIGHT);
+
 
 
     // Show the line details
-   printf("line[%06d]: chars=%06zd, buf size=%06zu, contents: %c\n", line_count,
-        line_size, line_buf_size, line_buf[1]);
+   //printf("line[%06d]: chars=%06zd, buf size=%06zu, contents: %s\n", line_count,
+      //  line_size, line_buf_size, line_buf);
 
      //Get the next line
 
@@ -132,9 +135,8 @@ void main(){
 
   free(line_buf);
   line_buf = NULL;
-
   fclose(file_to_read);
-  fclose(file_to_write);
+  return themap;
 
 }
 

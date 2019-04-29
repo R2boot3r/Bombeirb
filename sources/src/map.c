@@ -16,6 +16,8 @@
 #include <get_map_info.h>
 
 ////////////////// Variables/Structures ////////////////////
+int  STATIC_MAP_WIDTH = 12; // Il faudra par la suite modifier le nom de c 2 variables
+int  STATIC_MAP_HEIGHT = 12;
 
 struct map {
 	int width;
