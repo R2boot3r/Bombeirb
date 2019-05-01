@@ -13,11 +13,14 @@
 #include <misc.h>
 #include <sprite.h>
 #include <window.h>
-#include <get_map_info.h>
+#include <get_map.h>
+#include <string.h>
+#include <unistd.h>
 
 ////////////////// Variables/Structures ////////////////////
-int  STATIC_MAP_WIDTH = 12; // Il faudra par la suite modifier le nom de c 2 variables
-int  STATIC_MAP_HEIGHT = 12;
+
+//int  STATIC_MAP_WIDTH = 12; // Il faudra par la suite modifier le nom de c 2 variables
+//int  STATIC_MAP_HEIGHT = 12;
 
 struct map {
 	int width;
@@ -222,6 +225,7 @@ int door_is_closed(struct map* map){
 		return 0;
 }
 
+
 // Fonction qui permet d'affecter une carte a la map
 // A modifier faire eune seul fonction correcte pck la c pas top
 // en entré metre la carte et en sortie tj la structure map element grid
@@ -255,24 +259,16 @@ struct map* map_get_static_2(void)
 {
 	struct map* map = map_new(STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT);
 
-	unsigned char themap[STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT] = {
-	  CELL_EMPTY, 17, 17, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
-	  CELL_STONE, CELL_STONE, CELL_STONE, CELL_TREE, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY , CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_TREE, CELL_BOX, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_EMPTY, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX_LIFE, CELL_EMPTY,
-	  CELL_BOX,  CELL_EMPTY, CELL_DOOR, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
-		};
+	unsigned char * themap2 = malloc(10*sizeof(char));
+
+	*themap2 = chargement_carte(themap2);
 
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
-		map->grid[i] = themap[i];
-
+	{
+		//printf("%d",themap2[i]);
+		map->grid[i] = themap2[i];
+		//printf("1\n");
+	}
 	return map;
 }
