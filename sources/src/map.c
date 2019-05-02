@@ -225,6 +225,7 @@ int door_is_closed(struct map* map){
 		return 0;
 }
 
+char* chemin = "./map/map_0";
 
 // Fonction qui permet d'affecter une carte a la map
 // A modifier faire eune seul fonction correcte pck la c pas top
@@ -235,7 +236,7 @@ struct map* map_get_static_1(void)
 
 	unsigned char * themap1 = malloc(10*sizeof(char));
 
-	*themap1 = chargement_carte(themap1);
+	*themap1 = chargement_carte(themap1,chemin);
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
 	{
@@ -250,7 +251,7 @@ struct map* map_get_static_2(void)
 
 	unsigned char * themap2 = malloc(10*sizeof(char));
 
-	*themap2 = chargement_carte(themap2);
+	*themap2 = chargement_carte(themap2,chemin);
 
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
