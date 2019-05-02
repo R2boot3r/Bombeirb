@@ -3,10 +3,21 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <dirent.h>
+
+#ifndef WIN32
+    #include <sys/types.h> // problème sur la librairy si le système d'exploitation est windows
+#endif
+// liens des resssources qui m'ont été utiles pour cette librairy
+//Pour la lecture de fichier et le type https://www.linuxquestions.org/questions/programming-9/how-to-know-the-file-extension-with-c-602471/
+
+
+
 // choses qui reste a faire
 // variable a entrée qui contient le nom des fichiers
 // Fonction qui scan le dossier et qui renvoye toutes les map_set_cell_type
 // modifications des STATIC_MAP_WIDTH STATIC_MAP_HEIGHT
+// remettre les infos sur strsep
 
 
 char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble des caratères des fichiers
