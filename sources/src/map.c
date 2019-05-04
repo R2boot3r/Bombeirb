@@ -22,7 +22,7 @@
 //int  STATIC_MAP_WIDTH = 12; // Il faudra par la suite modifier le nom de c 2 variables
 //int  STATIC_MAP_HEIGHT = 12;
 
-struct map {
+struct map { //  une structure n'a pas besoin qu'on initialise les variables et pointeurs tt est null ou 0
 	int width;
 	int height;
 	unsigned char* grid;
@@ -41,7 +41,7 @@ struct map* map_new(int width, int height) //
 {
 	assert(width > 0 && height > 0);
 
-	struct map* map = malloc(sizeof *map);
+	struct map *map = malloc(sizeof *map); // reaction du pointeur mp sur la struture map
 	if (map == NULL )
 		error("map_new : malloc map failed");
 
@@ -225,7 +225,7 @@ int door_is_closed(struct map* map){
 		return 0;
 }
 
-char* chemin = "./map/map_0";
+char* chemin = "./monde/monde1/map/map_monde1_0";
 
 // Fonction qui permet d'affecter une carte a la map
 // A modifier faire eune seul fonction correcte pck la c pas top

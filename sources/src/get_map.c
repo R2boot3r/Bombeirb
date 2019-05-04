@@ -4,10 +4,13 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <dirent.h>
+#include <stdbool.h>
 
 #ifndef WIN32
     #include <sys/types.h> // problème sur la librairy si le système d'exploitation est windows
 #endif
+
+#define MAX_CHAR_NIVEAU 64 // a deplacer par la suivante
 // liens des resssources qui m'ont été utiles pour cette librairy
 //Pour la lecture de fichier et le type https://www.linuxquestions.org/questions/programming-9/how-to-know-the-file-extension-with-c-602471/
 
@@ -18,7 +21,20 @@
 // Fonction qui scan le dossier et qui renvoye toutes les map_set_cell_type
 // modifications des STATIC_MAP_WIDTH STATIC_MAP_HEIGHT
 // remettre les infos sur strsep
+//-D_DEFAULT_SOURCE a mettre pour éviter les erreures de c voir https://stackoverflow.com/questions/26284110/strdup-confused-about-warnings-implicit-declaration-makes-pointer-with
 
+struct monde {
+	int nombre_carte;
+	int level_debut;
+	int ini_x, ini_y;
+	char* nom_niveau;
+};
+
+bool ext_match(const char *name, const char *ext) // fonction qui renvoie true si un fichier a la bonne extension pas encore utiliser
+{
+ size_t nl = strlen(name), el = strlen(ext);
+ return nl >= el && !strcmp(name + nl - el, ext);
+}
 
 char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble des caratères des fichiers
     FILE* file = fopen(fileName, "r");
@@ -51,7 +67,7 @@ unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonct
   texte = readFile(chemin);
 
   assert(texte != NULL);
-
+ //faire ligne 1 = et bloucle pour la suite
   while ((token = strsep(&texte, "\n")) != NULL) // permet de recuperer un token (string) qui contient la partie gauche du caractère
   {
     if(line_count == 0)
@@ -74,11 +90,57 @@ unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonct
   }
   line_count++;
 }
-
-//free(token2); il y a un problème avec le free(token2) pk ?
-free(token);
-free(texte);
-
-
 return themap;
 }
+
+struct monde* monde_new(void) //
+{
+	struct monde *monde = malloc(sizeof( *monde)); // reaction du pointeur mp sur la struture map
+	//if (monde == NULL )
+		//error("monde : malloc map failed");
+	monde->nom_niveau = malloc(MAX_CHAR_NIVEAU);
+	//if (monde == NULL) {
+		//error("map_new : malloc grid failed");
+	return monde;
+	}
+
+struct monde* chargement_monde(struct monde* monde , char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
+    char* texte;
+    char* token,* token2;
+    int line_count = 0;
+    int l=0;
+    texte = readFile(chemin);
+
+    assert(texte != NULL);
+
+    while ((token = strsep(&texte, "\n")) != NULL) // permet de recuperer un token (string) qui contient la partie gauche du caractère
+    {
+  		//printf("%s\n",token);
+      if(line_count == 0)
+      {
+  			monde->nombre_carte = atoi(token);
+  			//printf("%d\n",monde->nombre_carte);
+        }
+      if(line_count == 1){ // A voir si scanf() fscanf sscanf n'est pas mieux faire la même sur l'autre
+  			token2 = strsep(&token, ":"); // voir si les atoi servent vraiment bien
+  			monde->level_debut = atoi(token2);
+  			//printf("%s\n",token2);
+  			token2 = strsep(&token,":");
+  			monde->ini_x = atoi(token2);
+  			//printf("%s\n",token2);
+  			token2 = strsep(&token2,",");
+  			monde->ini_y = atoi(token2);
+
+  			//printf("%s\n",token2);
+  			token2 = strsep(&token2,",");
+
+  			//printf("%s\n",token2);
+      }
+      if(line_count == 2){
+  			monde->nom_niveau = token;
+      }
+    //printf("%d\n",line_count);
+    line_count++;
+  }
+    return monde;
+  }
