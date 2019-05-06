@@ -15,6 +15,17 @@ struct monde {
 	char* nom_niveau;
 };
 
+if(line_count == 0)
+{
+	token2 = strsep(&token, ":");
+	a[0] = atoi(token2);
+	printf("%s",token2);
+	token2 = strsep(&token, ":");
+	a[1] = atoi(token2);
+	printf("%s",token2);
+	unsigned char *themap =  (unsigned char*)realloc(themap, a[0]*a[1]*sizeof(char)); //réallocation de la mémoire en fonction de la taille récuprer précedement
+}
+
 
 
  bool ext_match(const char *name, const char *ext) // fonction qui renvoie true si un fichier a la bonne extension
