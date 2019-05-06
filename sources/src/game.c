@@ -8,7 +8,7 @@
 #include <time.h>
 #include <game.h>
 #include <misc.h>
-
+#include <bomb.h>
 
 ////////////////// Variables ////////////////////
 
@@ -108,6 +108,7 @@ void game_display(struct game* game) {
 	game_banner_display(game);
 	map_display(game_get_current_map(game));
 	player_display(game->player);
+	//update_time_bomb(bomb1);
 
 	window_refresh();
 }
@@ -120,13 +121,6 @@ static short input_keyboard(struct game* game, int timer) { // recupère les ent
 	SDL_Event event; // structure qui permet de lire les événements du pc
 	struct player* player = game_get_player(game); // récupère les infos du player
 	struct map* map = game_get_current_map(game);	// récupère les infos de la map
-	int x, y;
-	for (int i = 0; i < 12; i++) {
-	  for (int j = 0; j < 12; j++) {
-	    x = i * SIZE_BLOC;
-	    y = j * SIZE_BLOC;
-		}
-	}
 	int i = player_get_x(game->player);
 	int j = player_get_y(game->player);
 	while (SDL_PollEvent(&event)) { // SDL_PollEvent permet de lire les events dans la queueet agit en fonction
@@ -182,16 +176,3 @@ int game_update(struct game* game, int timer) {
 
 	return 0;
 }
-
-
-// Fonction qui permet de changer de map
-/*void map_change(struct game* game, int x) {
-	if(x == 1){
-		game->maps[0] = map_get_static_1();
-		printf(map_get_static_1());
-	}
-	if (x == 0){
-		game->maps[0] = map_get_static_2();
-	}
-
-}*/

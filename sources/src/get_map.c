@@ -76,17 +76,17 @@ unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonct
     {
     	token2 = strsep(&token, ":"); // permet de récuperer la première ligne
     	a[0] = atoi(token2);
-    	//printf("%s",token2);
+    	printf("%s",token2);
     	token2 = strsep(&token, ":");
     	a[1] = atoi(token2);
-    	//printf("%s",token2);
+    	printf("%s",token2);
     	unsigned char *themap =  (unsigned char*)realloc(themap, a[0]*a[1]*sizeof(char)); //réallocation de la mémoire en fonction de la taille récuprer précedement
     }
 
     else{
    while((token2 = strsep(&token, " ")) != NULL ) //permet de récuperer un token qui contient les chiffres qui représente chaque élément de la carte
    {
-      //printf("%s\n", token2);
+      printf("%s\n", token2);
       themap[l] = atoi(token2);
       l++;
     }
