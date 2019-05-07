@@ -5,8 +5,11 @@
 #include <misc.h>
 #include <constant.h>
 #include <map.h>
-#include <game.h>
+#include <game.h> // a supprimer par la suite mettre tout un un fichier struture
 #include <bomb.h>
+
+// a mettre la creation de la bomb lors de l'apelle du clavier espace
+
 // utilisation d'une chaine listée pour la gestion des bombes
 struct bomb {
   int x,y;
@@ -16,7 +19,10 @@ struct bomb {
 	struct bomb * next;
 };
 
-
+struct bomb* bomb_init(){
+	struct bomb* bomb = NULL;
+	return bomb;
+}
 // Documentation sur les listes chainées
 //http://www.zentut.com/c-tutorial/c-linked-list/
 // fonction qui crée une bombe spécifique
@@ -39,53 +45,74 @@ struct bomb* bomb_create(int x, int y, struct bomb* next) {
 }
 
 //fonction qui permet de crée la chaine de bombs
-struct bomb* bomb_prepend( struct bomb* head,int x , int y){
+struct bomb* bomb_prepend( struct bomb* head, int x , int y){
 	struct bomb* bomb = bomb_create(x,y,head);
 	head = bomb;
 	return head;
 }
 
-
+// Fonction qui permet de mettre le timer de la bomb a jour
 void bomb_timer_update(struct bomb* bomb){ // a apeller avant bomb_update_ttl
 	bomb->timer = SDL_GetTicks() - bomb->time_init;
 }
 
-
-typedef void (*callback)(node* data);
-
-void bomb_ttl_update_traverse(struct bomb* head,callback f)
+// Fonction qui permet la mise a jour de l'état de chaque bombe
+// et qui appelle bomb_timer_update pour chancune des bombes
+void bomb_ttl_update_traverse(struct bomb* bomb)
 {
+  struct bomb* curseur = bomb;
 	unsigned int time;
-	struct curseur = head;
 	while(curseur != NULL)
 	{
-		time = bomb->timer;
+    bomb_timer_update(curseur);
+		time = curseur->timer;
 		if((time >= 1000) && (time < 2000)){ // il ne sert a rien d'affecter la première image car cela est fait dans la boucle d'initialisation
-			bomb->bomb_type = BOMB_TTL3
+			curseur->bomb_type = BOMB_TTL3;
 		}
 		else if((time >= 2000) && (time < 3000)){
-			bomb->bomb_type = BOMB_TTL2
+			curseur->bomb_type = BOMB_TTL2;
 		}
 		else if((time >= 3000) && (time < 4000)){
-			bomb->bomb_type = BOMB_TTL1
+			curseur->bomb_type = BOMB_TTL1;
 		}
-/*	else if((time >= 4000) && (time < 1000)){
-		bomb->bomb_type = BOMB2
-	}*/
-		f(curseur);
-		curseur = curseur->next
+    else if((time >= 4000) && (time < 5000)){
+		    curseur->bomb_type = BOMB_TTL0_EX;
+	  }
+
+		curseur = curseur->next;
 	}
 }
 
 
+void bomb_display(struct bomb* bomb){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
+  bomb = bomb_ttl_update_traverse();
+    struct bomb* curseur = bomb;
+    while(curseur != NULL){
+      switch(curseur->bomb_type){ // on va pouvoir rajouter la suite ici des autres condition, on supprime la bombe
 
+      default:
+        window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x, curseur->y); // a appeler autres fonction pour la range
+      }
+      curseur = curseur->next;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+// Toutes les fonctions en rapport avec la récupération de données
 
 
 void bomb_free(struct bomb* bomb) {
 	assert(bomb);
 	free(bomb);
 }
-
 
 int bomb_get_x(struct bomb* bomb) {
 	assert(bomb != NULL);
@@ -97,23 +124,13 @@ int bomb_get_y(struct bomb* bomb) {
 	return bomb->y;
 }
 
-int bomb_get_range(struct bomb* bomb){
-	assert(bomb);
-	return bomb->range;
+int bomb_get_bomb_type(struct bomb* bomb){
+  assert(bomb);
+  return bomb->bomb_type;
+
 }
 
 int bomb_get_timer(struct bomb* bomb){
 	assert(bomb);
 	return bomb->timer;
 }
-
-void update_bomb_timer(struct bomb* bomb){
-	assert(bomb);
-	bomb->timer=SDL_GetTicks();
-}
-
-/*void bomb_display(struct bomb* bomb) {
-	assert(bomb);
-	window_display_image(sprite_get_bomb(bomb->bomb_type),
-			bomb->x * SIZE_BLOC,bomb->y * SIZE_BLOC);
-}*/

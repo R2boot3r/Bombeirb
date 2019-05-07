@@ -35,6 +35,7 @@
 #define DIGIT_9			"sprite/banner_9.jpg"
 
 // Sprites of Bombs
+#define BOMB_TTL0_EX		"sprite/explosion.png"
 #define BOMB_TTL1       "sprite/bomb1.png"
 #define BOMB_TTL2       "sprite/bomb2.png"
 #define BOMB_TTL3       "sprite/bomb3.png"
@@ -71,6 +72,7 @@ SDL_Surface* bomb4;
 SDL_Surface* bomb3;
 SDL_Surface* bomb2;
 SDL_Surface* bomb1;
+SDL_Surface* bomb0_ex;
 
 // bonus
 #define NB_BONUS 4
@@ -124,6 +126,7 @@ static void map_load() {
 	bomb3 = image_load(BOMB_TTL3);
 	bomb2 = image_load(BOMB_TTL2);
 	bomb1 = image_load(BOMB_TTL1);
+	bomb0_ex = image_load(BOMB_TTL0_EX);
 }
 
 static void map_unload() {
@@ -138,6 +141,7 @@ static void map_unload() {
 	SDL_FreeSurface(bomb3);
 	SDL_FreeSurface(bomb2);
 	SDL_FreeSurface(bomb1);
+	SDL_FreeSurface(bomb0_ex);
 
 }
 
@@ -246,6 +250,7 @@ SDL_Surface* sprite_get_door_closed() {
 	return door_closed;
 }
 
+
 SDL_Surface* sprite_get_bomb4() {
 	assert(bomb4);
 	return bomb4;
@@ -261,4 +266,8 @@ SDL_Surface* sprite_get_bomb2() {
 SDL_Surface* sprite_get_bomb1() {
 	assert(bomb1);
 	return bomb1;
+}
+SDL_Surface* sprite_get_bomb0() {
+	assert(bomb0_ex);
+	return bomb0_ex;
 }

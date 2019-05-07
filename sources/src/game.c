@@ -16,9 +16,12 @@ struct game {
 	struct map** maps;       // the game's map
 	short levels;        // nb maps of the game
 	struct player* player;
+	struct bomb * bomb;
 }; // struture du game
 
 ////////////////// Fonctions ////////////////////
+
+
 
 // Fonction qui crée une nouvelle game
 struct game* game_new(void) {
@@ -32,6 +35,7 @@ struct game* game_new(void) {
 	//game->level = 0;
 
 	game->player = player_init(3);
+	game->bomb = bomb_init();
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
 
@@ -108,6 +112,8 @@ void game_display(struct game* game) {
 	game_banner_display(game);
 	map_display(game_get_current_map(game));
 	player_display(game->player);
+	bomb_display(game->bomb);
+
 	//update_time_bomb(bomb1);
 
 	window_refresh();
@@ -149,8 +155,7 @@ static short input_keyboard(struct game* game, int timer) { // recupère les ent
 				break;
 			case SDLK_SPACE:
 					if (player_get_nb_bomb(player)>0){
-						timer = SDL_GetTicks();
-						player_drop_bomb(player, map,timer,i,j);
+						bomb_prepend(game->bomb,i,j);
 					}
 				break;
 

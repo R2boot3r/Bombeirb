@@ -89,6 +89,7 @@ void player_dec_nb_bomb(struct player* player) {
 }
 
 // Fonctions qui dépose une bombe voir mohammed pas fini problèmes
+/*
 void  player_drop_bomb(struct player* player, struct map* map,int timer,int x, int y){
 	//player_dec_nb_bomb(player);
 	map_set_cell_type(map,x,y,CELL_BOMB_4);
@@ -104,7 +105,9 @@ void  player_drop_bomb(struct player* player, struct map* map,int timer,int x, i
 					}
 			 }
 		}
-}
+}*/
+
+
 
 /*int player_move_case_Door(struct player* player, struct map* map, int x, int y){
 	if (map->door_closed){
