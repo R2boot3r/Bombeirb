@@ -133,23 +133,6 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 }
 
 // Fonction qui  Affiche la bonne image de bomb
-void display_bomb(struct map* map, int x ,int y , unsigned char type) {
-	int last_time=0;
-	switch (type & 0x0f) {
-		case (BOMB_TTL4):
-			window_display_image(sprite_get_bomb4(),x,y);
-		break;
-		case (BOMB_TTL3):
-				 	window_display_image(sprite_get_bomb3(), x ,y);
- 	 	break;
-		case (BOMB_TTL2):
-	 		window_display_image(sprite_get_bomb2(), x ,y);
- 		break;
-		case (BOMB_TTL1):
-	 		window_display_image(sprite_get_bomb1(), x ,y);
- 		break;
-	}
-}
 
 // Fonction qui affiche si la porte est ouverte ou non
 void display_door(struct map* map, int x, int  y){
@@ -204,7 +187,6 @@ void map_display(struct map* map)
 	      display_door(map, x, y);
 	      break;
 	    case CELL_BOMB:
-				display_bomb(map, x,y, type);
 			break;
 	    }
 	  }
@@ -229,7 +211,7 @@ int door_is_closed(struct map* map){
 ///////////////////////////////////LECTURE DES CARTES////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* chemin = "./monde/monde1/map/map_monde1_0";
+char* chemin = "./monde/monde1/map/map_monde1_0.txt";
 
 // Fonction qui permet d'affecter une carte a la map
 // A modifier faire eune seul fonction correcte pck la c pas top

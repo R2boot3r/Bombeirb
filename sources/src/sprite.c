@@ -4,7 +4,7 @@
  ******************************************************************************/
 #include <SDL/SDL_image.h>
 #include <assert.h>
-
+#include <map.h> // a modifier par la suite faire fichier globale
 #include <sprite.h>
 #include <misc.h>
 
@@ -122,12 +122,16 @@ static void map_load() {
 	stone = image_load(MAP_STONE);
 	door_opened = image_load(MAP_DOOR_OPENED);
 	door_closed = image_load(MAP_DOOR_CLOSED);
-	bomb4 = image_load(BOMB_TTL4);
-	bomb3 = image_load(BOMB_TTL3);
-	bomb2 = image_load(BOMB_TTL2);
-	bomb1 = image_load(BOMB_TTL1);
-	bomb0_ex = image_load(BOMB_TTL0_EX);
 }
+static void bomb_load(){
+bomb4 = image_load(BOMB_TTL4);
+bomb3 = image_load(BOMB_TTL3);
+bomb2 = image_load(BOMB_TTL2);
+bomb1 = image_load(BOMB_TTL1);
+bomb0_ex = image_load(BOMB_TTL0_EX);
+};
+
+
 
 static void map_unload() {
 	SDL_FreeSurface(tree);
@@ -137,12 +141,14 @@ static void map_unload() {
 	SDL_FreeSurface(stone);
 	SDL_FreeSurface(door_opened);
 	SDL_FreeSurface(door_closed);
+
+}
+static void bomb_unload(){
 	SDL_FreeSurface(bomb4);
 	SDL_FreeSurface(bomb3);
 	SDL_FreeSurface(bomb2);
 	SDL_FreeSurface(bomb1);
 	SDL_FreeSurface(bomb0_ex);
-
 }
 
 static void bonus_load() {
@@ -176,13 +182,15 @@ void sprite_load() {
 	bonus_load();
 	banner_load();
 	player_load();
+	bomb_load();
 }
 
-void sprite_free() {
+void sprite_free() { //  a mettre les images
 	map_unload();
 	bonus_unload();
 	banner_unload();
 	player_unload();
+	bomb_unload();
 }
 
 SDL_Surface* sprite_get_number(short number) {
@@ -249,8 +257,36 @@ SDL_Surface* sprite_get_door_closed() {
 	assert(door_closed);
 	return door_closed;
 }
+SDL_Surface* sprite_get_bomb(enum bomb_type bomb_etat){
+	SDL_Surface* bomb;
+/*	if(bomb_etat == -1){
 
+	}*/
+	if(bomb_etat == 0){
+		assert(bomb0_ex);
+		bomb = bomb0_ex;
+	}
+	else if(bomb_etat == 1){
+		assert(bomb1);
+		bomb = bomb1;
+	}
+	else if(bomb_etat == 2){
+		assert(bomb2);
+		bomb = bomb2;
+	}
+	else if(bomb_etat == 3){
+		assert(bomb3);
+		bomb = bomb3;
+	}
+	else if(bomb_etat == 4){
+		assert(bomb4);
+		bomb = bomb4;
+	}
 
+	return bomb;
+}
+
+/*
 SDL_Surface* sprite_get_bomb4() {
 	assert(bomb4);
 	return bomb4;
@@ -271,3 +307,4 @@ SDL_Surface* sprite_get_bomb0() {
 	assert(bomb0_ex);
 	return bomb0_ex;
 }
+*/

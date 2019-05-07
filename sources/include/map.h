@@ -27,7 +27,8 @@ enum bonus_type {
 	BONUS_LIFE=0x06,
 };
 enum bomb_type {
-	BOMB_TTL5_EX = 0, // 0000
+	//CELL_EMPTY= -1, // // On a tout décaler de un crant pour pouvoir rajouter la cell-CELL_EMPTY
+	BOMB_TTL0_EX = 0, // 0000
 	BOMB_TTL1 = 1, // 0001
 	BOMB_TTL2 = 2, // 0010
 	BOMB_TTL3 = 3, // 0011

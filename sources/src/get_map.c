@@ -62,7 +62,6 @@ char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble
 unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
   char* texte;
   char* token,* token2;
-  int k = 0;
   int line_count = 0;
   int* a = (int *)calloc(2,sizeof(int));
   int l=0;

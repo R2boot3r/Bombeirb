@@ -20,10 +20,14 @@ SDL_Surface* sprite_get_key();
 SDL_Surface* sprite_get_stone();
 SDL_Surface* sprite_get_door_opened();
 SDL_Surface* sprite_get_door_closed();
-SDL_Surface* sprite_get_bomb4();
+
+SDL_Surface* sprite_get_bomb(enum bomb_type bomb_etat);
+
+
+/*SDL_Surface* sprite_get_bomb4();
 SDL_Surface* sprite_get_bomb3();
 SDL_Surface* sprite_get_bomb2();
-SDL_Surface* sprite_get_bomb1();
+SDL_Surface* sprite_get_bomb1();*/
 
 
 SDL_Surface* sprite_get_number(short number);

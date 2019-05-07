@@ -9,7 +9,7 @@
 #include <map.h>
 #include <window.h>
 #include <sprite.h>
-
+#include <bomb.h>
 // Abstract data type
 struct game;
 
@@ -33,5 +33,7 @@ int game_update(struct game* game, int timer);
 
 // Fonction qui permet de changer de map
 void map_change(struct game* game, int x);
+
+void game_set_bomb(struct game * game, struct bomb * bombs);
 
 #endif /* GAME_H_ */

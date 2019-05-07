@@ -21,6 +21,8 @@ struct player {
 	enum direction direction;
 	int bombs;
 	short level;
+	
+
 }; //
 
 ////////////////// Fonctions ////////////////////

@@ -8,7 +8,7 @@
 #include <game.h> // a supprimer par la suite mettre tout un un fichier struture
 #include <bomb.h>
 
-// a mettre la creation de la bomb lors de l'apelle du clavier espace
+
 
 // utilisation d'une chaine listée pour la gestion des bombes
 struct bomb {
@@ -22,13 +22,15 @@ struct bomb {
 struct bomb* bomb_init(){
 	struct bomb* bomb = NULL;
 	return bomb;
-}
+} // même chose
+
+
 // Documentation sur les listes chainées
 //http://www.zentut.com/c-tutorial/c-linked-list/
 // fonction qui crée une bombe spécifique
-struct bomb* bomb_create(int x, int y, struct bomb* next) {
+struct bomb* bomb_create(int x, int y) {
 	struct bomb* bomb;
-	bomb = malloc(sizeof(*bomb));
+	bomb = malloc(sizeof(struct bomb));
 	if (!bomb) // a voir si on laisse cette partie
 	{
 		printf("Erreur lors de la creation de la struture bomb.\n");
@@ -46,9 +48,10 @@ struct bomb* bomb_create(int x, int y, struct bomb* next) {
 
 //fonction qui permet de crée la chaine de bombs
 struct bomb* bomb_prepend( struct bomb* head, int x , int y){
-	struct bomb* bomb = bomb_create(x,y,head);
-	head = bomb;
-	return head;
+	struct bomb* bomb = bomb_create(x,y);
+  bomb->next = head;
+  //printf("je suis dans bomb_preprend");
+	return bomb;
 }
 
 // Fonction qui permet de mettre le timer de la bomb a jour
@@ -58,9 +61,9 @@ void bomb_timer_update(struct bomb* bomb){ // a apeller avant bomb_update_ttl
 
 // Fonction qui permet la mise a jour de l'état de chaque bombe
 // et qui appelle bomb_timer_update pour chancune des bombes
-void bomb_ttl_update_traverse(struct bomb* bomb)
+void bomb_ttl_update_traverse(struct bomb* curseur)
 {
-  struct bomb* curseur = bomb;
+
 	unsigned int time;
 	while(curseur != NULL)
 	{
@@ -68,34 +71,49 @@ void bomb_ttl_update_traverse(struct bomb* bomb)
 		time = curseur->timer;
 		if((time >= 1000) && (time < 2000)){ // il ne sert a rien d'affecter la première image car cela est fait dans la boucle d'initialisation
 			curseur->bomb_type = BOMB_TTL3;
+      printf("mod ttl3");
 		}
 		else if((time >= 2000) && (time < 3000)){
 			curseur->bomb_type = BOMB_TTL2;
+      printf("mod ttl2");
 		}
 		else if((time >= 3000) && (time < 4000)){
 			curseur->bomb_type = BOMB_TTL1;
+      printf("mod ttl1");
 		}
     else if((time >= 4000) && (time < 5000)){
 		    curseur->bomb_type = BOMB_TTL0_EX;
+      printf("mod ex");
 	  }
-
-		curseur = curseur->next;
+/*    else if((time >= 5000)){
+		    curseur->bomb_type = BOMB_TTL0_EX;
+      printf("mod ex");
+	  }*/
+		curseur=curseur->next;
 	}
+  printf("hors du while\n");
 }
 
 
-void bomb_display(struct bomb* bomb){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
-  bomb = bomb_ttl_update_traverse();
-    struct bomb* curseur = bomb;
-    while(curseur != NULL){
-      switch(curseur->bomb_type){ // on va pouvoir rajouter la suite ici des autres condition, on supprime la bombe
 
-      default:
-        window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x, curseur->y); // a appeler autres fonction pour la range
-      }
+
+
+void bomb_display(struct bomb* curseur){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
+    bomb_ttl_update_traverse(curseur);
+    printf("je suis dans bombe display\n");
+    //printf("%s",*curseur->next);
+    //struct bomb* curseur = bomb;
+    while(curseur != NULL){
+      //switch(curseur->bomb_type){ // on va pouvoir rajouter la suite ici des autres condition, on supprime la bombe
+
+      //default:
+      printf("je suis dans la boucle de game display\n");
+      window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC); // a appeler autres fonction pour la range
+
       curseur = curseur->next;
     }
-}
+  }
+
 
 
 
