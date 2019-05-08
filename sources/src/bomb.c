@@ -85,8 +85,8 @@ void bomb_ttl_update_traverse(struct bomb* curseur)
 		    curseur->bomb_type = BOMB_TTL0_EX;
       printf("mod ex");
 	  }
-/*    else if((time >= 5000)){
-		    curseur->bomb_type = BOMB_TTL0_EX;
+   /*else if((time >= 5000)){
+		    curseur->bomb_type = CELL_EMPTYB;
       printf("mod ex");
 	  }*/
 		curseur=curseur->next;
@@ -95,24 +95,52 @@ void bomb_ttl_update_traverse(struct bomb* curseur)
 }
 
 
+void bomb_delete(struct bomb* bomb){
+    if (bomb->next == NULL)
+  {
+    printf("dans bombdel1");
+    free(bomb);
+    //game_set_bomb(game, NULL)
+  }
+  struct bomb* temp = bomb;
+  struct bomb* before = bomb;
+  printf("je suis dans le while");
+  while (temp != NULL)
+  {
+    printf("je suis dans le while");
+    if ( temp->bomb_type == CELL_EMPTYB){
+      before = temp;
+      temp = temp->next;
+
+      before->next = NULL;
+      //free(temp);
+      temp = NULL;
+      //game_set_bomb(game, bomb);
+    }
+
+  }
+}
 
 
 
 void bomb_display(struct bomb* curseur){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
     bomb_ttl_update_traverse(curseur);
     printf("je suis dans bombe display\n");
+    //bomb_delete(curseur);
     //printf("%s",*curseur->next);
     //struct bomb* curseur = bomb;
     while(curseur != NULL){
-      //switch(curseur->bomb_type){ // on va pouvoir rajouter la suite ici des autres condition, on supprime la bombe
+/*      if(){ // on affiche la case vide puis on delete la bomb de la liste
 
-      //default:
+      }*/
+
       printf("je suis dans la boucle de game display\n");
       window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC); // a appeler autres fonction pour la range
 
       curseur = curseur->next;
     }
   }
+
 
 
 

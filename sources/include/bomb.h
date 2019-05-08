@@ -22,3 +22,4 @@ int bomb_get_y(struct bomb* bomb);
 
 int bomb_get_bomb_type(struct bomb* bomb);
 int bomb_get_timer(struct bomb* bomb);
+void bomb_delete(struct bomb* bomb);
