@@ -211,7 +211,7 @@ int door_is_closed(struct map* map){
 ///////////////////////////////////LECTURE DES CARTES////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* chemin = "./monde/monde1/map/map_monde1_0.txt";
+char* chemin = "./map/map_monde0_0";
 
 // Fonction qui permet d'affecter une carte a la map
 // A modifier faire eune seul fonction correcte pck la c pas top

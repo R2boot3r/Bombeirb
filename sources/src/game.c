@@ -175,10 +175,7 @@ static short input_keyboard(struct game* game, int timer) { // recupère les ent
 	return 0;
 }
 
-void game_set_bomb(struct game * game, struct bomb * bomb){
-	assert(game);
-	game->bomb = bomb;
-}
+
 
 // Fonction ????
 int game_update(struct game* game, int timer) {
