@@ -12,7 +12,7 @@ struct bomb* bomb_create(int x, int y);
 struct bomb* bomb_prepend( struct bomb* head, int x , int y);
 
 void bomb_timer_update(struct bomb* bomb);
-void bomb_display(struct bomb* bomb);
+void bomb_display(struct bomb* curseur, struct map * map);
 
 void bomb_free(struct bomb* bomb);
 

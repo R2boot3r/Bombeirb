@@ -33,6 +33,7 @@ enum bomb_type {
 	BOMB_TTL2 = 2, // 0010
 	BOMB_TTL3 = 3, // 0011
 	BOMB_TTL4 = 4, // 0100
+	CELL_EMPTY5= 5,
 };
 
 enum scenery_type {

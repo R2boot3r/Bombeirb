@@ -129,6 +129,7 @@ bomb3 = image_load(BOMB_TTL3);
 bomb2 = image_load(BOMB_TTL2);
 bomb1 = image_load(BOMB_TTL1);
 bomb0_ex = image_load(BOMB_TTL0_EX);
+
 };
 
 
@@ -281,6 +282,10 @@ SDL_Surface* sprite_get_bomb(enum bomb_type bomb_etat){
 	else if(bomb_etat == 4){
 		assert(bomb4);
 		bomb = bomb4;
+	}
+	else if(bomb_etat == 5){
+		assert(bomb0_ex);
+		bomb = bomb0_ex;
 	}
 
 	return bomb;

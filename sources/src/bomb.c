@@ -85,10 +85,10 @@ void bomb_ttl_update_traverse(struct bomb* curseur)
 		    curseur->bomb_type = BOMB_TTL0_EX;
       printf("mod ex");
 	  }
-/*    else if((time >= 5000)){
-		    curseur->bomb_type = BOMB_TTL0_EX;
+    else if((time >= 5000)){
+		    curseur->bomb_type = CELL_EMPTY5;
       printf("mod ex");
-	  }*/
+	  }
 		curseur=curseur->next;
 	}
   printf("hors du while\n");
@@ -97,19 +97,43 @@ void bomb_ttl_update_traverse(struct bomb* curseur)
 
 
 
+void bomb_supprimer(struct bomb* bomb){
+  if(bomb){
+  struct bomb * temp = bomb;
+  struct bomb * tmpp;
 
-void bomb_display(struct bomb* curseur){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
+
+
+  while(temp->next!= NULL && temp->next->next!=NULL){
+
+    if(temp->next->bomb_type == CELL_EMPTY5){
+      tmpp = temp->next;
+      temp->next = temp->next->next;
+      free(tmpp);
+      }
+
+    temp = temp->next;
+
+    }
+  }
+}
+
+
+
+void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
     bomb_ttl_update_traverse(curseur);
     printf("je suis dans bombe display\n");
     //printf("%s",*curseur->next);
     //struct bomb* curseur = bomb;
+    bomb_supprimer(curseur);
     while(curseur != NULL){
-      //switch(curseur->bomb_type){ // on va pouvoir rajouter la suite ici des autres condition, on supprime la bombe
-
-      //default:
+      if(curseur->bomb_type ==  CELL_EMPTY5){ // on va pouvoir rajouter la suite ici des autres condition, on supprime la bombe
+        map_set_cell_type(map,curseur->x,curseur->y,CELL_EMPTY);
+      }
+      else{
       printf("je suis dans la boucle de game display\n");
       window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC); // a appeler autres fonction pour la range
-
+      }
       curseur = curseur->next;
     }
   }
