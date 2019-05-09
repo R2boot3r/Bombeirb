@@ -149,7 +149,21 @@ void bomb_explosion_case_cell(struct map * map, int x, int y){
 }
 }
 
-void explosion_display();
+void explosion_display(int x, int y, int range, struct map * map){
+   for(int i = -(range); i<= range;i++){
+     if ( i != x ){
+
+       bomb_explosion_case_cell(map,x+i,y);
+     }
+
+     }
+  for(int j = -(range);j<= range; j++){
+       if( j != y){
+         bomb_explosion_case_cell(map,x,y+j);
+       //}
+     }
+   }
+}
 
 
 
@@ -168,18 +182,16 @@ void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renag
       printf("je suis dans la boucle de game display\n");
       window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC);
         if(curseur->bomb_type == BOMB_TTL0_EX){
-
-          bomb_explosion_case_cell(map,curseur->x-1, curseur->y);
-          bomb_explosion_case_cell(map,curseur->x+1, curseur->y);
-          bomb_explosion_case_cell(map,curseur->x, curseur->y-1);
-          bomb_explosion_case_cell(map,curseur->x, curseur->y+1);
-       }
+          explosion_display(curseur->x,curseur->y,2,map);
+          //bomb_explosion_case_cell(map,curseur->x+1,curseur->y);
+        }
+      }
       // a appeler autres fonction pour la range
-    }
-      curseur = curseur->next;
 
+      curseur = curseur->next;
+    }
   }
-}
+
 
 
 
