@@ -119,6 +119,49 @@ void bomb_supprimer(struct bomb* bomb){
 }
 
 
+void bomb_explosion_case_cell(struct map * map, int x, int y){
+  switch (map_get_cell_type(map, x, y)) {
+    case CELL_SCENERY:
+
+      break;
+    case CELL_BOX:
+      //map_set_cell_type(map,x,y,CELL_EMPTY);
+      window_display_image(sprite_get_bomb(BOMB_TTL0_EX),x*SIZE_BLOC, y*SIZE_BLOC);
+      break;
+    case CELL_BONUS:
+    //Bn=bomb_explosion_case_cell_bonus(game);
+      break;
+
+    case CELL_KEY:
+      break;
+
+    case CELL_DOOR:
+      break;
+
+    case CELL_EMPTY:
+        window_display_image(sprite_get_bomb(BOMB_TTL0_EX),x*SIZE_BLOC, y*SIZE_BLOC);
+      break;
+    default:
+      break;
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
     bomb_ttl_update_traverse(curseur);
@@ -128,15 +171,24 @@ void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renag
     bomb_supprimer(curseur);
     while(curseur != NULL){
       if(curseur->bomb_type ==  CELL_EMPTY5){ // on va pouvoir rajouter la suite ici des autres condition, on supprime la bombe
-        map_set_cell_type(map,curseur->x,curseur->y,CELL_EMPTY);
+        //map_set_cell_type(map,curseur->x,curseur->y,CELL_EMPTY); // regarder fct
       }
       else{
       printf("je suis dans la boucle de game display\n");
-      window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC); // a appeler autres fonction pour la range
-      }
-      curseur = curseur->next;
+      window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC);
+        if(curseur->bomb_type == BOMB_TTL0_EX){
+
+          bomb_explosion_case_cell(map,curseur->x-1, curseur->y);
+          bomb_explosion_case_cell(map,curseur->x+1, curseur->y);
+          bomb_explosion_case_cell(map,curseur->x, curseur->y-1);
+          bomb_explosion_case_cell(map,curseur->x, curseur->y+1);
+        }
+      // a appeler autres fonction pour la range
     }
+      curseur = curseur->next;
+
   }
+}
 
 
 
