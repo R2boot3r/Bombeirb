@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
 		timer = SDL_GetTicks();
 		done = game_update(game , timer);
 		game_display(game);
+		//printf("%d", SDL_GetTicks());
 
 		execution_speed = SDL_GetTicks() - timer;
 		if (execution_speed < ideal_speed)

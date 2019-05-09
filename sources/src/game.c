@@ -156,7 +156,7 @@ static short input_keyboard(struct game* game, int timer) { // recupère les ent
 			case SDLK_SPACE:
 					if (player_get_nb_bomb(player)>0){
 						game->bomb = bomb_prepend(game->bomb,i,j);
-						printf("j'appuie sur espace\n");
+						//printf("j'appuie sur espace\n");
 					}
 				break;
 
