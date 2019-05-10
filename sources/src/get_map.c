@@ -63,24 +63,6 @@ char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble
     return code;
 }
 
-void chargement_nom( struct monde * monde, char * chemin_monde){
-  for(int i = 0;i < monde->nombre_carte;i++ ){
-
-    monde->nom_niveau;
-
-
-
-
-
-  }
-
-
-
-
-
-
-
-}
 
 
 unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
