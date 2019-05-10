@@ -119,34 +119,41 @@ void bomb_supprimer(struct bomb* bomb){
 }
 
 
-void bomb_explosion_case_cell(struct map * map, int x, int y){
+int bomb_explosion_case_cell(struct map * map, int x, int y){
   if(map_is_inside(map,x,y)){
   switch (map_get_cell_type(map, x, y)) {
     case CELL_SCENERY:
-
+      return 0;
       break;
     case CELL_BOX:
       map_set_cell_type(map,x,y,CELL_EMPTY);
       window_display_image(sprite_get_bomb(BOMB_TTL0_EX),x*SIZE_BLOC, y*SIZE_BLOC);
+      return 1;
       break;
     case CELL_BONUS:
-    //Bn=bomb_explosion_case_cell_bonus(game);
+    //Bn=bomb_expl-osion_case_cell_bonus(game);
+      return 1;
       break;
 
     case CELL_KEY:
+      return 1;
       break;
 
     case CELL_DOOR:
+      return 0;
       break;
 
     case CELL_EMPTY:
         window_display_image(sprite_get_bomb(BOMB_TTL0_EX),x*SIZE_BLOC, y*SIZE_BLOC);
+        return 1;
       break;
     default:
+        return 1;
       break;
 
   }
 }
+return 1;
 }
 
 void explosion_display(int x, int y, int range, struct map * map){
@@ -157,7 +164,7 @@ void explosion_display(int x, int y, int range, struct map * map){
      }
 
      }
-  for(int j = -(range);j<= range; j++){
+     for(int j = -(range);j<= range; j++){
        if( j != y){
          bomb_explosion_case_cell(map,x,y+j);
        //}
@@ -165,7 +172,36 @@ void explosion_display(int x, int y, int range, struct map * map){
    }
 }
 
+// Function that enables you to not make the explosion pass certain objects
+void explosion_display1(int x, int y,int range, struct map * map){
+  for(int i = (x-1); i>=(x-range); i--){
+    //printf("1\n");
+    if (bomb_explosion_case_cell(map,i,y)==0){ // pas besoin de rappeler le fonction ca affiche lors du teste peut etre pas terrible
+      break;
+    }
+  }
+  for(int i = (x+1); i<=(x+range); i++){
+    //printf("1\n");
+    if (bomb_explosion_case_cell(map,i,y)==0){ // pas besoin de rappeler le fonction ca affiche lors du teste peut etre pas terrible
+      break;
+    }
+  }
+  for(int i = (y-1); i>=(y-range); i--){
+    //printf("1\n");
+    if (bomb_explosion_case_cell(map,x,i)==0){ // pas besoin de rappeler le fonction ca affiche lors du teste peut etre pas terrible
+      break;
+    }
+  }
+  for(int i = (y+1); i<=(y+range); i++){
+    //printf("1\n");
+    if (bomb_explosion_case_cell(map,x,i)==0){ // pas besoin de rappeler le fonction ca affiche lors du teste peut etre pas terrible
+      break;
+    }
+  }
 
+
+
+}
 
 
 void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
@@ -182,7 +218,7 @@ void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renag
       printf("je suis dans la boucle de game display\n");
       window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC);
         if(curseur->bomb_type == BOMB_TTL0_EX){
-          explosion_display(curseur->x,curseur->y,2,map);
+          explosion_display1(curseur->x,curseur->y,4,map);
           //bomb_explosion_case_cell(map,curseur->x+1,curseur->y);
         }
       }

@@ -7,13 +7,9 @@
 #include <stdbool.h>
 
 void main(){
-  int range = 1;
-  for(int i = -(range); i<= range;i++){
-    for(int j = -(range);j<= range; j++){
-      //if(i != x && j != y){
-        printf("%d ",i);
-        printf("%d\n",j);
-      //}
-    }
-  }
+  int x = 4;
+  int range = 2;
+for(int i = (x-1); i>=(x-range); i--){
+  printf("%d",i);
+}
 }
