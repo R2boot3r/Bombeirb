@@ -11,9 +11,6 @@
 #endif
 
 #define MAX_CHAR_NIVEAU 64
-#define MAX_CHAR 100
-
-char* chemin_monde = "../sources/monde/monde0_info";
  // a deplacer par la suivante
  // voir si on fzit pas une struture pour le chatgement des maps aussi
 // liens des resssources qui m'ont été utiles pour cette librairy
@@ -40,6 +37,13 @@ bool ext_match(const char *name, const char *ext) // fonction qui renvoie true s
  size_t nl = strlen(name), el = strlen(ext);
  return nl >= el && !strcmp(name + nl - el, ext);
 }
+
+char* chemin_map = "../map";
+char* chemin_monde = "../monde/map_monde0_info";
+
+
+
+
 char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble des caratères des fichiers
     FILE* file = fopen(fileName, "r");
     char* code;
@@ -58,6 +62,8 @@ char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble
     fclose(file);
     return code;
 }
+
+
 
 unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
   char* texte;
@@ -106,7 +112,6 @@ struct monde* monde_new(void) //
 	return monde;
 	}
 
-
 struct monde* chargement_monde(struct monde* monde , char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
     char* texte;
     char* token,* token2;
@@ -146,61 +151,3 @@ struct monde* chargement_monde(struct monde* monde , char* chemin) { // fonction
   }
     return monde;
   }
-
-struct monde* monde_init(void){
-  struct monde* monde = monde_new();
-  monde = chargement_monde(monde,chemin_monde);
-  return monde;
-}
-
-void print_struct(struct monde * monde){
-  printf("%d ",monde->nombre_carte);
-  printf("%d ",monde->level_debut);
-  printf("%d ",monde->ini_x);
-  printf("%d ",monde->ini_y);
-  printf("%s\n",monde->nom_niveau);
-
-}
-
-
-// fonction qui modifie le tableauqui contient les liens
-void nom_fichier(struct monde * monde, char * chemin_map, char arr[][MAX_CHAR]){ // voir themap pour amélioration
-  for(int i=0; i< monde->nombre_carte ;i++){
-    //char arr[i][]
-    char chemin[MAX_CHAR];
-    strcpy(chemin,chemin_map);
-    char s[] = {'0' + i, '\0'}; // pas de problèmes on se limite a 8 niveau
-    strcat(chemin,monde->nom_niveau);
-    strcat(chemin,s);
-    //printf("dfdf");
-    strcpy(arr[i],chemin);
-
-  }
-
-}
-
-
-
-
-
-void main(){
-  // voir ici pour ce qu'il faut https://stackoverflow.com/questions/14088804/how-to-return-matrix-2d-array-from-function-c/14088911
-  // Il faudrait faire des teste sur la copy pour savoir d'ou viens la potentiel erreur
-
-  char chemin_map[MAX_CHAR];
-  char chemin_une_map[MAX_CHAR];
-  strcpy(chemin_map,"../map/");
-
-
-  struct monde* monde = monde_new();
-
-  monde = chargement_monde(monde,chemin_monde);
-
-
-  char  arr[monde->nombre_carte][MAX_CHAR];
-
-  nom_fichier(monde,chemin_map,arr); // modifie array
-
-
-
-}
