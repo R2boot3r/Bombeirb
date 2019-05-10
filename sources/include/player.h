@@ -40,5 +40,6 @@ int player_move(struct player* player, struct map* map);
 void player_display(struct player* player);
 
 int player_return_level(struct player* player);
+int player_return_range(struct player* player);
 
 #endif /* PLAYER_H_ */

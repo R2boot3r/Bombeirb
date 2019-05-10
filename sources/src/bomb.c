@@ -204,7 +204,7 @@ void explosion_display1(int x, int y,int range, struct map * map){
 }
 
 
-void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
+void bomb_display(struct bomb* curseur, struct map * map, int range){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
     bomb_ttl_update_traverse(curseur);
     printf("je suis dans bombe display\n");
     //printf("%s",*curseur->next);
@@ -218,7 +218,7 @@ void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renag
       printf("je suis dans la boucle de game display\n");
       window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC);
         if(curseur->bomb_type == BOMB_TTL0_EX){
-          explosion_display1(curseur->x,curseur->y,4,map);
+          explosion_display1(curseur->x,curseur->y,range,map);
           //bomb_explosion_case_cell(map,curseur->x+1,curseur->y);
         }
       }
