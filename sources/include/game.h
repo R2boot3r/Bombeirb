@@ -25,6 +25,12 @@ struct player* game_get_player(struct game* game);
 // Return the current map
 struct map* game_get_current_map(struct game* game);
 
+// monster move manipulation:
+void monsters_move(struct game* game);
+void monsters_move_level(struct game* game, int monster_time);
+
+
+
 // Display the game on the screen
 void game_display(struct game* game);
 

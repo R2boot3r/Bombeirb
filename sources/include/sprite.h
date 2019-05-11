@@ -13,6 +13,7 @@
 void		 sprite_load();
 
 SDL_Surface* sprite_get_player(enum direction direction);
+SDL_Surface* sprite_get_monster(enum direction direction);
 SDL_Surface* sprite_get_bonus(enum bonus_type bonus_type);
 SDL_Surface* sprite_get_tree();
 SDL_Surface* sprite_get_box();
@@ -23,11 +24,6 @@ SDL_Surface* sprite_get_door_closed();
 
 SDL_Surface* sprite_get_bomb(enum bomb_type bomb_etat);
 
-
-/*SDL_Surface* sprite_get_bomb4();
-SDL_Surface* sprite_get_bomb3();
-SDL_Surface* sprite_get_bomb2();
-SDL_Surface* sprite_get_bomb1();*/
 
 
 SDL_Surface* sprite_get_number(short number);

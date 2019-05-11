@@ -98,8 +98,14 @@ int map_get_height(struct map* map)
 // A voir
 enum cell_type map_get_cell_type(struct map* map, int x, int y)
 {
-	//assert(map && map_is_inside(map, x, y));
+	assert(map && map_is_inside(map, x, y));
 	return map->grid[CELL(x,y)] & 0xf0;
+}
+
+enum bonus_type map_get_bonus_type(struct map* map, int x, int y)
+{
+	assert(map && map_is_inside(map, x, y));
+	return map->grid[CELL(x,y)] & 0x0f;
 }
 
 // A voir
@@ -128,6 +134,10 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 
 	case BONUS_BOMB_NB_INC:
 		window_display_image(sprite_get_bonus(BONUS_BOMB_NB_INC), x, y);
+		break;
+
+	case BONUS_LIFE:
+		window_display_image(sprite_get_banner_life(), x, y);
 		break;
 	}
 }
@@ -211,7 +221,9 @@ int door_is_closed(struct map* map){
 ///////////////////////////////////LECTURE DES CARTES////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* chemin = "./map/map_monde0_0";
+char* chemin1 = "./map/map_monde0_0";
+char* chemin2 = "./map/map_monde0_1";
+
 
 // Fonction qui permet d'affecter une carte a la map
 // A modifier faire eune seul fonction correcte pck la c pas top
@@ -222,7 +234,7 @@ struct map* map_get_static_1(void)
 
 	unsigned char * themap1 = malloc(10*sizeof(char));
 
-	*themap1 = chargement_carte(themap1,chemin);
+	*themap1 = chargement_carte(themap1,chemin1);
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
 	{
@@ -237,7 +249,7 @@ struct map* map_get_static_2(void)
 
 	unsigned char * themap2 = malloc(10*sizeof(char));
 
-	*themap2 = chargement_carte(themap2,chemin);
+	*themap2 = chargement_carte(themap2,chemin2);
 
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)

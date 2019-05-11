@@ -9,6 +9,7 @@
 #include <game.h>
 #include <misc.h>
 #include <bomb.h>
+#include <monster.h>
 
 ////////////////// Variables ////////////////////
 
@@ -17,6 +18,8 @@ struct game {
 	short levels;        // nb maps of the game
 	struct player* player;
 	struct bomb * bomb;
+	struct monster **monsters;
+	int nb_monster;
 }; // struture du game
 
 ////////////////// Fonctions ////////////////////
@@ -29,15 +32,22 @@ struct game* game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
+	game->monsters = malloc(sizeof(struct game));
 	game->maps[0] = map_get_static_1();
 	game->maps[1] = map_get_static_2();
-	game->levels = 2;
-	//game->level = 0;
-
-	game->player = player_init(3);
 	game->bomb = bomb_init();
+	game->levels = 2;
+	game->nb_monster=2;
+	//game->level = 0;
+  for(int i=0; i<game->nb_monster; i++){
+		game->monsters[i] = monster_init();
+	}
+	game->player = player_init(3,3);
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
+	//Set default location of monsters
+	monster_set_position(game->monsters[0],6,6);
+	monster_set_position(game->monsters[1],7,6);
 
 	return game;
 
@@ -48,7 +58,9 @@ struct game* game_new(void) {
 // Fonction qui libère toutes les variables de game ATT voir pour maps
 void game_free(struct game* game) {
 	assert(game);
-
+	for(int i=0; i<game->nb_monster; i++){
+		monster_free(game->monsters[i]);
+	}
 	player_free(game->player);
 	for (int i = 0; i < game->levels; i++)
 		map_free(game->maps[i]);
@@ -61,10 +73,29 @@ struct player* game_get_player(struct game* game) {
 	return game->player;
 }
 
+//fonction qui permet de faire bouger les monstres sur la maps
+void monsters_move_level(struct game* game, int monster_time){
+	struct player* player= game_get_player(game);
+	short level = player_return_level(player) +1;
+	printf("%d\n" ,level);
+	if (SDL_GetTicks()-monster_time>(1000)){
+		monsters_move(game);
+		monster_time=SDL_GetTicks();
+	}
+}
+
+void monsters_move(struct game* game){
+	struct map* map = game_get_current_map(game);
+	for (int i = 0; i<game->nb_monster; i++){
+		monster_move(game->monsters[i],map);
+	}
+}
+
 
 // Fonction qui permet de selectionner la bonne carte en fonction du level
 struct map* game_get_current_map(struct game* game) {
 	assert(game);
+
 	struct player* player = game_get_player(game);
 
 	return game->maps[player_return_level(player)];
@@ -88,29 +119,41 @@ void game_banner_display(struct game* game) {
 	window_display_image(sprite_get_banner_life(), x, y);
 
 	x = white_bloc + SIZE_BLOC;
-	window_display_image(sprite_get_number(7), x, y);
+	window_display_image(
+		sprite_get_number(player_get_nb_hurt(game_get_player(game))), x, y);
 
-	x = 2 * white_bloc + 2 * SIZE_BLOC;
+	x = 2 * white_bloc + SIZE_BLOC;
 	window_display_image(sprite_get_banner_bomb(), x, y);
 
-	x = 2 * white_bloc + 3 * SIZE_BLOC;
+	x = 2 * white_bloc + 2 * SIZE_BLOC;
 	window_display_image(
 			sprite_get_number(player_get_nb_bomb(game_get_player(game))), x, y);
 
-	x = 3 * white_bloc + 4 * SIZE_BLOC;
+	x = 3 * white_bloc + 2 * SIZE_BLOC;
 	window_display_image(sprite_get_banner_range(), x, y);
 
-	x = 3 * white_bloc + 5 * SIZE_BLOC;
-	window_display_image(sprite_get_number(3), x, y);
+	x = 3 * white_bloc + 3 * SIZE_BLOC;
+	window_display_image(
+		sprite_get_number(player_get_range_bomb(game_get_player(game))), x, y);
+
+	x = 5 * white_bloc + 2 * SIZE_BLOC;
+	window_display_image(sprite_get_key(),x,y);
+
+	x = 5 * white_bloc + 3 * SIZE_BLOC;
+	window_display_image(
+		sprite_get_number(player_get_key_number(game_get_player(game))), x, y);
+
 }
 
 // Fonction Principale d'affichage
 void game_display(struct game* game) {
 	assert(game);
-
 	window_clear();
 	game_banner_display(game);
 	map_display(game_get_current_map(game));
+	for(int i=0; i<game->nb_monster; i++){
+		monster_display(game->monsters[i]); //the monsters have to be displayed after the map.
+	}
 	player_display(game->player);
 	bomb_display(game->bomb,game_get_current_map(game));
 

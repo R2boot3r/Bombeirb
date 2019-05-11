@@ -21,7 +21,9 @@ struct player {
 	enum direction direction;
 	int bombs;
 	short level;
-	
+	int range;
+	int key;
+	int hurt;
 
 }; //
 
@@ -29,7 +31,7 @@ struct player {
 
 
 // Fonction qui initialise le player
-struct player* player_init(int bombs) {
+struct player* player_init(int bombs, int hurt) {
 	struct player* player = malloc(sizeof(*player));
 	if (!player)
 		error("Memory error");
@@ -37,6 +39,9 @@ struct player* player_init(int bombs) {
 	player->direction = NORTH;
 	player->bombs = bombs;
 	player->level = 0;
+	player->range = 2;
+	player->key = 0;
+	player->hurt = hurt;
 
 	return player;
 }
@@ -66,6 +71,59 @@ int player_get_y(struct player* player) {
 	return player->y;
 }
 
+//Fonction qui retourne le nombre de vie du player:
+int player_get_nb_hurt(struct player* player) {
+	assert(player);
+	return player->hurt;
+}
+
+//fonction qui incrémente le nombre de vie
+void player_inc_nb_hurt(struct player* player) {
+	assert(player);
+	player->hurt += 1;
+}
+
+//fonction qui décrémente le nombre de vie
+void player_dec_nb_hurt(struct player* player) {
+	assert(player);
+	player->hurt -= 1;
+}
+
+//controle du range
+int player_get_range_bomb(struct player* player) {
+	assert(player);
+	return player->range;
+}
+
+void player_inc_range_bomb(struct player* player) {
+	assert(player);
+	player->range += 1;
+}
+
+void player_dec_range_bomb(struct player* player) {
+	assert(player);
+	player->range -= 1;
+}
+
+
+//key control
+int player_get_key_number(struct player* player) {
+	assert(player);
+	return player->key;
+}
+
+void player_inc_key_number(struct player* player) {
+	assert(player);
+	player->key += 1;
+}
+
+void player_dec_key_number(struct player* player) {
+	assert(player);
+	player->key -= 1;
+}
+
+
+
 // Fonction qui met la position du joeur
 void player_set_current_way(struct player* player, enum direction way) {
 	assert(player);
@@ -90,36 +148,30 @@ void player_dec_nb_bomb(struct player* player) {
 	player->bombs -= 1;
 }
 
-// Fonctions qui dépose une bombe voir mohammed pas fini problèmes
-/*
-void  player_drop_bomb(struct player* player, struct map* map,int timer,int x, int y){
-	//player_dec_nb_bomb(player);
-	map_set_cell_type(map,x,y,CELL_BOMB_4);
-	int last_time=SDL_GetTicks();
-		if (timer >= last_time + 1000){
-				map_set_cell_type(map , x, y,CELL_BOMB_3);
-				last_time=SDL_GetTicks();
-				if (timer >= last_time + 1000){
-					map_set_cell_type(map , x, y,CELL_BOMB_2);
-					last_time=SDL_GetTicks();
-					if (timer >= last_time + 1000){
-						map_set_cell_type(map , x, y,CELL_BOMB_1);
-					}
-			 }
-		}
-}*/
-
-
-
-/*int player_move_case_Door(struct player* player, struct map* map, int x, int y){
-	if (map->door_closed){
-		return 0;
+void player_move_case_bonus(struct player * player, struct map* map, int x, int y){
+	switch (map_get_bonus_type(map,x,y)){
+		case BONUS_LIFE:
+		 map_set_cell_type(map, x, y, CELL_EMPTY);
+		 player_inc_nb_hurt(player);
+		break;
+		case BONUS_BOMB_NB_DEC:
+			map_set_cell_type(map,x,y, CELL_EMPTY);
+			player_dec_nb_bomb(player);
+		break;
+		case BONUS_BOMB_NB_INC:
+			map_set_cell_type(map,x,y, CELL_EMPTY);
+			player_inc_nb_bomb(player);
+		break;
+		case BONUS_BOMB_RANGE_DEC:
+			map_set_cell_type(map,x,y, CELL_EMPTY);
+			player_dec_range_bomb(player);
+		break;
+		case BONUS_BOMB_RANGE_INC:
+			map_set_cell_type(map,x,y, CELL_EMPTY);
+			player_inc_range_bomb(player);
+		break;
 	}
-	else{
-		map_new(STATIC_MAP_WIDTH,STATIC_MAP_HEIGHT);
-		return 0;
-	}
-}*/
+}
 
 
 
@@ -134,7 +186,7 @@ void player_move_case_box(struct player* player, struct map* map, int x, int y){
 	}
 	if (player->direction == SOUTH  && map_get_cell_type(map,x,y+1)==CELL_EMPTY ){
 			if(map_is_inside(map,x,y+1)){
-		(map , x, y,CELL_EMPTY);
+		map_set_cell_type(map , x, y,CELL_EMPTY);
 		map_set_cell_type(map , x, y+1,CELL_BOX);
 		player->y++;
 		}
@@ -173,19 +225,22 @@ int player_move_aux(struct player* player, struct map* map, int x, int y) {
 		break;
 
 	case CELL_BONUS:
-		return 0;
+		player_move_case_bonus(player,map,x,y);
 		break;
 
 	case CELL_MONSTER:
 		return 0;
 		break;
 	case CELL_KEY: // partie qui sert a ouvrir la porte lorsque le joeur a la clef
+		player_inc_key_number(player);
 		map_set_cell_type(map, x, y, CELL_EMPTY);
 		map_open_door(map);
-		return 0;
+
+		return 1;
 	case CELL_DOOR:
 		if (!door_is_closed(map)) // partie qui permet de changer de biveau et de voir si la porte est ouverte
 		{
+			player_dec_key_number(player);
 			player->level = player->level +1;
 		}
 		return 0;

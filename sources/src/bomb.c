@@ -33,7 +33,7 @@ struct bomb* bomb_create(int x, int y) {
 	bomb = malloc(sizeof(struct bomb));
 	if (!bomb) // a voir si on laisse cette partie
 	{
-		printf("Erreur lors de la creation de la struture bomb.\n");
+		//printf("Erreur lors de la creation de la struture bomb.\n");
 		exit(0);
 	}
 	bomb->x = x;
@@ -71,27 +71,27 @@ void bomb_ttl_update_traverse(struct bomb* curseur)
 		time = curseur->timer;
 		if((time >= 1000) && (time < 2000)){ // il ne sert a rien d'affecter la première image car cela est fait dans la boucle d'initialisation
 			curseur->bomb_type = BOMB_TTL3;
-      printf("mod ttl3");
+      //printf("mod ttl3");
 		}
 		else if((time >= 2000) && (time < 3000)){
 			curseur->bomb_type = BOMB_TTL2;
-      printf("mod ttl2");
+      //printf("mod ttl2");
 		}
 		else if((time >= 3000) && (time < 4000)){
 			curseur->bomb_type = BOMB_TTL1;
-      printf("mod ttl1");
+      //printf("mod ttl1");
 		}
     else if((time >= 4000) && (time < 4400)){
 		    curseur->bomb_type = BOMB_TTL0_EX;
-      printf("mod ex");
+      //printf("mod ex");
 	  }
     else if((time >= 4400)){
 		    curseur->bomb_type = CELL_EMPTY5;
-      printf("mod ex");
+      //printf("mod ex");
 	  }
 		curseur=curseur->next;
 	}
-  printf("hors du while\n");
+  //printf("hors du while\n");
 }
 
 
@@ -156,7 +156,7 @@ void explosion_display();
 
 void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renage qui sera aussi appeler et prit en paramètre par une autre fonction
     bomb_ttl_update_traverse(curseur);
-    printf("je suis dans bombe display\n");
+    //printf("je suis dans bombe display\n");
     //printf("%s",*curseur->next);
     //struct bomb* curseur = bomb;
     bomb_supprimer(curseur);
@@ -165,7 +165,7 @@ void bomb_display(struct bomb* curseur, struct map * map){ // ainsi que le renag
         //map_set_cell_type(map,curseur->x,curseur->y,CELL_EMPTY); // regarder fct
 
 
-      printf("je suis dans la boucle de game display\n");
+      //printf("je suis dans la boucle de game display\n");
       window_display_image(sprite_get_bomb(curseur->bomb_type),curseur->x*SIZE_BLOC, curseur->y*SIZE_BLOC);
         if(curseur->bomb_type == BOMB_TTL0_EX){
 

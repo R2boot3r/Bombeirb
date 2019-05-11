@@ -27,7 +27,9 @@ int main(int argc, char *argv[]) {
 	// to obtain the DEFAULT_GAME_FPS, we have to reach a loop duration of (1000 / DEFAULT_GAME_FPS) ms
 	int ideal_speed = 1000 / DEFAULT_GAME_FPS;
 	int timer, execution_speed;
-
+	int monster_time = SDL_GetTicks();
+	struct player* player= game_get_player(game);
+	short level = player_return_level(player) +1;
 	// game loop
 	// static time rate implementation
 	int done = 0;
@@ -40,6 +42,13 @@ int main(int argc, char *argv[]) {
 		execution_speed = SDL_GetTicks() - timer;
 		if (execution_speed < ideal_speed)
 			SDL_Delay(ideal_speed - execution_speed); // we are ahead of ideal time. let's wait.
+
+		if (SDL_GetTicks()-monster_time>(1000/level)){
+			monsters_move(game);
+			monster_time=SDL_GetTicks();
+		}
+
+
 	}
 
 	game_free(game);
