@@ -9,7 +9,7 @@
 #include <game.h>
 #include <misc.h>
 #include <bomb.h>
-#include <monster.h>
+#include <get_map.h>
 
 ////////////////// Variables ////////////////////
 
@@ -18,9 +18,9 @@ struct game {
 	short levels;        // nb maps of the game
 	struct player* player;
 	struct bomb * bomb;
-	struct monster **monsters;
-	int nb_monster;
+	struct monde * monde;
 }; // struture du game
+
 
 ////////////////// Fonctions ////////////////////
 
@@ -31,11 +31,19 @@ struct game* game_new(void) {
 	sprite_load(); // load sprites into process memory
 
 	struct game* game = malloc(sizeof(*game));
+	game->monde = monde_init();
 	game->maps = malloc(sizeof(struct game));
-	game->monsters = malloc(sizeof(struct game));
-	game->maps[0] = map_get_static_1();
+	printf("%s",get_monde_nom_niveau(game->monde));
+	printf("zdsddssdfsd");
+	printf("zdsddssdfsd");
+	printf("zdsddssdfsd");
+
+
+	/*for(int i = 0; i<2;i++){
+		game->maps[i] = map_get_dynamique(game->monde,i);
+	}
+	*/
 	game->maps[1] = map_get_static_2();
-	game->bomb = bomb_init();
 	game->levels = 2;
 	game->nb_monster=2;
 	//game->level = 0;

@@ -89,6 +89,8 @@ int map_is_inside(struct map* map, int x, int y);
 struct map* map_get_static_1();
 struct map* map_get_static_2();
 
+//struct map* map_get_dynamique(struct monde * monde, int i);
+
 // Display the map on the screen
 void map_display(struct map* map);
 // test if the door is open or NOT

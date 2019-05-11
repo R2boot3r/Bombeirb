@@ -20,4 +20,7 @@ struct monde* monde_new(void);
 struct monde* chargement_monde(struct monde* monde , char* chemin);
 
 struct monde* monde_init(void);
+
+char * recuperation_nom_carte(struct monde * monde, int i);
  //
+char* get_monde_nom_niveau(struct monde* monde);

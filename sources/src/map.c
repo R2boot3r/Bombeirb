@@ -37,7 +37,7 @@ struct map { //  une structure n'a pas besoin qu'on initialise les variables et 
 
 
 // Fonction qui crée une nouvelle map au debut du jeu
-struct map* map_new(int width, int height) //
+struct map* map_new(int width, int height) // voir comment mettre static width et height a récuperer
 {
 	assert(width > 0 && height > 0);
 
@@ -258,3 +258,24 @@ struct map* map_get_static_2(void)
 	}
 	return map;
 }
+/*
+struct map* map_get_dynamique(struct game * game, int i){
+
+	// a voir comment faire pour changer le type d'entrée sur map-map_get_dynamique car la struture
+	// n'existe pas il faudra peut etre crée une fonction qui renvoye monde
+	// a voir com
+
+	// faire 2 fonction une dans get-map.h et une dans map.c qui prend en paramètre le resulatst
+	// faire fct get_game_monde et renvoyer pour map.h comme ca on a pas besoib de connaitre la struture monde
+	struct map * map = map_new(STATIC_MAP_WIDTH,STATIC_MAP_HEIGHT);
+	unsigned char * themap2 = malloc(10*sizeof(char));
+
+	*themap2 = chargement_carte(themap2, recuperation_nom_carte(monde,i));
+
+	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
+	{
+		map->grid[i] = themap2[i];
+	}
+	return map;
+}
+*/
