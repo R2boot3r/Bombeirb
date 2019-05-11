@@ -155,8 +155,7 @@ void game_display(struct game* game) {
 		monster_display(game->monsters[i]); //the monsters have to be displayed after the map.
 	}
 	player_display(game->player);
-	bomb_display(game->bomb,game_get_current_map(game));
-
+	bomb_display(game->bomb,game_get_current_map(game),player_return_range(game->player));
 	//update_time_bomb(bomb1);
 
 	window_refresh();

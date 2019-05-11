@@ -64,5 +64,6 @@ void player_move_case_bonus(struct player * player, struct map* map, int x, int 
 void player_display(struct player* player);
 
 int player_return_level(struct player* player);
+int player_return_range(struct player* player);
 
 #endif /* PLAYER_H_ */

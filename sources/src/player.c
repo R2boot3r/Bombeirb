@@ -17,13 +17,14 @@
 ////////////////// Variables ////////////////////
 
 struct player {
-	int x, y;
+	int x, y, range;
 	enum direction direction;
 	int bombs;
 	short level;
 	int range;
 	int key;
 	int hurt;
+
 
 }; //
 
@@ -304,4 +305,8 @@ void player_display(struct player* player) {
 
 int player_return_level(struct player* player){
 	return player->level;
+}
+
+int player_return_range(struct player* player){
+	return player->range;
 }
