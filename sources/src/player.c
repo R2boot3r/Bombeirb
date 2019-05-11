@@ -17,7 +17,7 @@
 ////////////////// Variables ////////////////////
 
 struct player {
-	int x, y, range;
+	int x, y;
 	enum direction direction;
 	int bombs;
 	short level;
