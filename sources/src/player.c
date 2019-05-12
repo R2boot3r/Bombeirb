@@ -17,13 +17,12 @@
 ////////////////// Variables ////////////////////
 
 struct player {
-	int x, y;
+	int x, y, range;
 	enum direction direction;
 	int bombs;
 	short level;
-	int range;
 	int key;
-	int hurt;
+	int heart;
 
 
 }; //
@@ -32,7 +31,7 @@ struct player {
 
 
 // Fonction qui initialise le player
-struct player* player_init(int bombs, int hurt) {
+struct player* player_init(int bombs, int heart) {
 	struct player* player = malloc(sizeof(*player));
 	if (!player)
 		error("Memory error");
@@ -42,8 +41,7 @@ struct player* player_init(int bombs, int hurt) {
 	player->level = 0;
 	player->range = 2;
 	player->key = 0;
-	player->hurt = hurt;
-
+	player->heart = heart;
 	return player;
 }
 
@@ -71,31 +69,30 @@ int player_get_y(struct player* player) {
 	assert(player != NULL);
 	return player->y;
 }
-
 //Fonction qui retourne le nombre de vie du player:
-int player_get_nb_hurt(struct player* player) {
+int player_get_nb_heart(struct player* player) {
 	assert(player);
-	return player->hurt;
+	return player->heart;
+}
+//fonction qui incrémente le nombre de vie
+void player_inc_nb_heart(struct player* player) {
+	assert(player);
+	player->heart += 1;
 }
 
-//fonction qui incrémente le nombre de vie
-void player_inc_nb_hurt(struct player* player) {
-	assert(player);
-	player->hurt += 1;
-}
 
 //fonction qui décrémente le nombre de vie
-void player_dec_nb_hurt(struct player* player) {
+void player_dec_nb_heart(struct player* player) {
 	assert(player);
-	player->hurt -= 1;
+	player->heart -= 1;
 }
 
-//controle du range
+// controle du range
+
 int player_get_range_bomb(struct player* player) {
 	assert(player);
 	return player->range;
 }
-
 void player_inc_range_bomb(struct player* player) {
 	assert(player);
 	player->range += 1;
@@ -105,7 +102,6 @@ void player_dec_range_bomb(struct player* player) {
 	assert(player);
 	player->range -= 1;
 }
-
 
 //key control
 int player_get_key_number(struct player* player) {
@@ -148,12 +144,12 @@ void player_dec_nb_bomb(struct player* player) {
 	assert(player);
 	player->bombs -= 1;
 }
-
+// Fonction qui permet de récuprer les bonus
 void player_move_case_bonus(struct player * player, struct map* map, int x, int y){
 	switch (map_get_bonus_type(map,x,y)){
 		case BONUS_LIFE:
 		 map_set_cell_type(map, x, y, CELL_EMPTY);
-		 player_inc_nb_hurt(player);
+		 player_inc_nb_heart(player);
 		break;
 		case BONUS_BOMB_NB_DEC:
 			map_set_cell_type(map,x,y, CELL_EMPTY);
@@ -227,22 +223,24 @@ int player_move_aux(struct player* player, struct map* map, int x, int y) {
 
 	case CELL_BONUS:
 		player_move_case_bonus(player,map,x,y);
+
+		return 1;
 		break;
 
 	case CELL_MONSTER:
 		return 0;
 		break;
 	case CELL_KEY: // partie qui sert a ouvrir la porte lorsque le joeur a la clef
-		player_inc_key_number(player);
 		map_set_cell_type(map, x, y, CELL_EMPTY);
+		player_inc_key_number(player);
 		map_open_door(map);
-
 		return 1;
 	case CELL_DOOR:
+	// code a rajouter ici pour bien faire fonctionner la porte
 		if (!door_is_closed(map)) // partie qui permet de changer de biveau et de voir si la porte est ouverte
 		{
-			player_dec_key_number(player);
 			player->level = player->level +1;
+			player_dec_key_number(player);
 		}
 		return 0;
 		break;
@@ -289,10 +287,6 @@ int player_move(struct player* player, struct map* map) {
 		}
 		break;
 	}
-// ca sert a rien
-/*	if (move) {
-		//map_set_cell_type(map, x, y, CELL_EMPTY);
-	}*/
 	return move;
 }
 

@@ -47,19 +47,23 @@ enum compose_type {
 	CELL_STONE    = CELL_SCENERY | SCENERY_STONE, // 17 0x11
 	CELL_PRINCESS = CELL_SCENERY | SCENERY_PRINCESS, // 0x14
 
+	CELL_BOMB_1 = CELL_BOMB | BOMB_TTL1,
+	CELL_BOMB_2 = CELL_BOMB | BOMB_TTL2,
+	CELL_BOMB_3 = CELL_BOMB | BOMB_TTL3,
+	CELL_BOMB_4 = CELL_BOMB | BOMB_TTL4,
+
     CELL_BOX_RANGEINC = CELL_BOX | BONUS_BOMB_RANGE_INC,
     CELL_BOX_RANGEDEC = CELL_BOX | BONUS_BOMB_RANGE_DEC,
 		CELL_BOX_BOMBINC  = CELL_BOX | BONUS_BOMB_NB_DEC,
     CELL_BOX_BOMBDEC  = CELL_BOX | BONUS_BOMB_NB_INC,
     CELL_BOX_LIFE     = CELL_BOX | BONUS_MONSTER,
     CELL_BOX_MONSTER  = CELL_BOX | BONUS_LIFE,
-
 		CELL_BONUS_RANGEINC = CELL_BONUS | BONUS_BOMB_RANGE_INC,
-    CELL_BONUS_RANGEDEC = CELL_BONUS | BONUS_BOMB_RANGE_DEC,
+		CELL_BONUS_RANGEDEC = CELL_BONUS | BONUS_BOMB_RANGE_DEC,
 		CELL_BONUS_BOMBINC  = CELL_BONUS | BONUS_BOMB_NB_INC,
-    CELL_BONUS_BOMBDEC  = CELL_BONUS | BONUS_BOMB_NB_DEC,
-    CELL_BONUS_LIFE     = CELL_BONUS | BONUS_LIFE, //
-    CELL_BONUS_MONSTER  = CELL_BONUS | BONUS_MONSTER,
+		CELL_BONUS_BOMBDEC  = CELL_BONUS | BONUS_BOMB_NB_DEC,
+		CELL_BONUS_LIFE     = CELL_BONUS | BONUS_LIFE, //
+		CELL_BONUS_MONSTER  = CELL_BONUS | BONUS_MONSTER,
 };
 
 struct map;
@@ -75,8 +79,6 @@ int map_get_height(struct map* map);
 
 // Return the type of a cell
 enum cell_type map_get_cell_type(struct map* map, int x, int y);
-
-// Return the type of a bonus
 enum bonus_type map_get_bonus_type(struct map* map, int x, int y);
 
 // Set the type of a cell
@@ -93,6 +95,7 @@ struct map* map_get_static_2();
 void map_display(struct map* map);
 // test if the door is open or NOT
 int door_is_closed(struct map* map);
-
+void map_open_door(struct map* map);
+struct map* map_get_dynamique(char * chemin_monde, int i);
 
 #endif /* MAP_H_ */

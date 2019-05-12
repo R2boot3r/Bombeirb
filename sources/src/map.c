@@ -16,7 +16,7 @@
 #include <get_map.h>
 #include <string.h>
 #include <unistd.h>
-
+#define MAX_CHAR 100
 ////////////////// Variables/Structures ////////////////////
 
 //int  STATIC_MAP_WIDTH = 12; // Il faudra par la suite modifier le nom de c 2 variables
@@ -98,15 +98,15 @@ int map_get_height(struct map* map)
 // A voir
 enum cell_type map_get_cell_type(struct map* map, int x, int y)
 {
-	assert(map && map_is_inside(map, x, y));
+	//assert(map && map_is_inside(map, x, y));
 	return map->grid[CELL(x,y)] & 0xf0;
 }
-
 enum bonus_type map_get_bonus_type(struct map* map, int x, int y)
 {
 	assert(map && map_is_inside(map, x, y));
 	return map->grid[CELL(x,y)] & 0x0f;
 }
+
 
 // A voir
 void map_set_cell_type(struct map* map, int x, int y, enum cell_type type)
@@ -135,10 +135,9 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 	case BONUS_BOMB_NB_INC:
 		window_display_image(sprite_get_bonus(BONUS_BOMB_NB_INC), x, y);
 		break;
-
 	case BONUS_LIFE:
-		window_display_image(sprite_get_banner_life(), x, y);
-		break;
+		window_display_image(sprite_get_banner_life(BONUS_LIFE), x, y);
+
 	}
 }
 
@@ -221,9 +220,7 @@ int door_is_closed(struct map* map){
 ///////////////////////////////////LECTURE DES CARTES////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* chemin1 = "./map/map_monde0_0";
-char* chemin2 = "./map/map_monde0_1";
-
+char* chemin = "./map/map_monde0_0";
 
 // Fonction qui permet d'affecter une carte a la map
 // A modifier faire eune seul fonction correcte pck la c pas top
@@ -234,7 +231,7 @@ struct map* map_get_static_1(void)
 
 	unsigned char * themap1 = malloc(10*sizeof(char));
 
-	*themap1 = chargement_carte(themap1,chemin1);
+	*themap1 = chargement_carte(themap1,chemin);
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
 	{
@@ -249,8 +246,32 @@ struct map* map_get_static_2(void)
 
 	unsigned char * themap2 = malloc(10*sizeof(char));
 
-	*themap2 = chargement_carte(themap2,chemin2);
+	*themap2 = chargement_carte(themap2,chemin);
 
+
+	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
+	{
+		map->grid[i] = themap2[i];
+	}
+	return map;
+}
+
+struct map* map_get_dynamique(char * chemin_monde, int i){
+
+	// a voir comment faire pour changer le type d'entrée sur map-map_get_dynamique car la struture
+	// n'existe pas il faudra peut etre crée une fonction qui renvoye monde
+	// a voir com
+
+	// faire 2 fonction une dans get-map.h et une dans map.c qui prend en paramètre le resulatst
+	// faire fct get_game_monde et renvoyer pour map.h comme ca on a pas besoib de connaitre la struture monde
+	struct map * map = map_new(STATIC_MAP_WIDTH,STATIC_MAP_HEIGHT);
+	unsigned char * themap2 = malloc(10*sizeof(char));
+	char chemin[MAX_CHAR];
+	recuperation_nom_carte(chemin,chemin_monde,i);
+	//printf("%s\n",chemin);
+
+
+	*themap2 = chargement_carte(themap2,chemin);
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
 	{

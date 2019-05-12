@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <dirent.h>
-#include <stdbool.h>
+
 
 #ifndef WIN32
     #include <sys/types.h> // problème sur la librairy si le système d'exploitation est windows
@@ -14,6 +14,7 @@
 #define MAX_CHAR 100
 
 char* chemin_monde = "../sources/monde/monde0_info";
+char* chemin_map = "./map/";
  // a deplacer par la suivante
  // voir si on fzit pas une struture pour le chatgement des maps aussi
 // liens des resssources qui m'ont été utiles pour cette librairy
@@ -35,11 +36,6 @@ struct monde {
 	char* nom_niveau;
 };
 
-bool ext_match(const char *name, const char *ext) // fonction qui renvoie true si un fichier a la bonne extension pas encore utiliser
-{
- size_t nl = strlen(name), el = strlen(ext);
- return nl >= el && !strcmp(name + nl - el, ext);
-}
 char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble des caratères des fichiers
     FILE* file = fopen(fileName, "r");
     char* code;
@@ -59,53 +55,26 @@ char* readFile(char *fileName) { // fonction qui permet de recupérer l'ensemble
     return code;
 }
 
-unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
-  char* texte;
-  char* token,* token2;
-  int line_count = 0;
-  int* a = (int *)calloc(2,sizeof(int));
-  int l=0;
-  texte = readFile(chemin);
-
-  assert(texte != NULL);
- //faire ligne 1 = et bloucle pour la suite
-  while ((token = strsep(&texte, "\n")) != NULL) // permet de recuperer un token (string) qui contient la partie gauche du caractère
-  {
-    if(line_count == 0)
-    {
-    	token2 = strsep(&token, ":"); // permet de récuperer la première ligne
-    	a[0] = atoi(token2);
-    	//printf("%s",token2);
-    	token2 = strsep(&token, ":");
-    	a[1] = atoi(token2);
-    	//printf("%s",token2);
-    	unsigned char *themap =  (unsigned char*)realloc(themap, a[0]*a[1]*sizeof(char)); //réallocation de la mémoire en fonction de la taille récuprer précedement
-    }
-
-    else{
-   while((token2 = strsep(&token, " ")) != NULL ) //permet de récuperer un token qui contient les chiffres qui représente chaque élément de la carte
-   {
-      //printf("%s\n", token2);
-      themap[l] = atoi(token2);
-      l++;
-    }
-  }
-  line_count++;
-}
-return themap;
-}
 
 struct monde* monde_new(void) //
 {
-	struct monde *monde = malloc(sizeof( *monde)); // reaction du pointeur mp sur la struture map
+	struct monde *monde = malloc(sizeof(struct monde)); // reaction du pointeur mp sur la struture map
 	//if (monde == NULL )
 		//error("monde : malloc map failed");
-	monde->nom_niveau = malloc(MAX_CHAR_NIVEAU);
+	//monde->nom_niveau = malloc(MAX_CHAR_NIVEAU);
 	//if (monde == NULL) {
 		//error("map_new : malloc grid failed");
 	return monde;
 	}
 
+  void print_struct(struct monde * monde){
+    printf("%d ",monde->nombre_carte);
+    printf("%d ",monde->level_debut);
+    printf("%d ",monde->ini_x);
+    printf("%d ",monde->ini_y);
+    printf("%s\n",monde->nom_niveau);
+
+  }
 
 struct monde* chargement_monde(struct monde* monde , char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
     char* texte;
@@ -144,7 +113,44 @@ struct monde* chargement_monde(struct monde* monde , char* chemin) { // fonction
     //printf("%d\n",line_count);
     line_count++;
   }
+  print_struct(monde);
     return monde;
+  }
+
+unsigned char * chargement_carte(unsigned char* themap, char* chemin) { // fonction qui va lire un fichier et recupère les informations de la carte
+    char* texte;
+    char* token,* token2;
+    int line_count = 0;
+    int* a = (int *)calloc(2,sizeof(int));
+    int l=0;
+    texte = readFile(chemin);
+
+    assert(texte != NULL);
+    //faire ligne 1 = et bloucle pour la suite
+    while ((token = strsep(&texte, "\n")) != NULL) // permet de recuperer un token (string) qui contient la partie gauche du caractère
+    {
+      if(line_count == 0)
+      {
+        token2 = strsep(&token, ":"); // permet de récuperer la première ligne
+        a[0] = atoi(token2);
+        printf("%s",token2);
+        token2 = strsep(&token, ":");
+        a[1] = atoi(token2);
+        printf("%s",token2);
+        unsigned char *themap =  (unsigned char*)realloc(themap, a[0]*a[1]*sizeof(char)); //réallocation de la mémoire en fonction de la taille récuprer précedement
+      }
+
+      else{
+        while((token2 = strsep(&token, " ")) != NULL ) //permet de récuperer un token qui contient les chiffres qui représente chaque élément de la carte
+        {
+          printf("%s\n", token2);
+          themap[l] = atoi(token2);
+          l++;
+        }
+      }
+      line_count++;
+    }
+    return themap;
   }
 
 struct monde* monde_init(void){
@@ -153,31 +159,28 @@ struct monde* monde_init(void){
   return monde;
 }
 
-void print_struct(struct monde * monde){
-  printf("%d ",monde->nombre_carte);
-  printf("%d ",monde->level_debut);
-  printf("%d ",monde->ini_x);
-  printf("%d ",monde->ini_y);
-  printf("%s\n",monde->nom_niveau);
-
-}
 
 
 // fonction qui modifie le tableauqui contient les liens
-void nom_fichier(struct monde * monde, char * chemin_map, char arr[][MAX_CHAR]){ // voir themap pour amélioration
-  for(int i=0; i< monde->nombre_carte ;i++){
+// fonction qui modifie le tableauqui contient les liens
+
+void recuperation_nom_carte(char * chemin,char * nom_carte, int i){ // voir themap pour amélioration
     //char arr[i][]
-    char chemin[MAX_CHAR];
     strcpy(chemin,chemin_map);
     char s[] = {'0' + i, '\0'}; // pas de problèmes on se limite a 8 niveau
-    strcat(chemin,monde->nom_niveau);
+    strcat(chemin,nom_carte);
     strcat(chemin,s);
-    //printf("dfdf");
-    strcpy(arr[i],chemin);
-
-  }
 
 }
+
+char* get_monde_nom_niveau(struct monde* monde){
+  return monde->nom_niveau;
+}
+
+int get_monde_nombre_carte(struct monde * monde){
+return monde->nombre_carte;
+}
+
 
 
 /*

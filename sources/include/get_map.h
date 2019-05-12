@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <dirent.h>
-#include <stdbool.h>
 
 char* chemin_monde;
+char* chemin_map;
 
 struct monde;
 
@@ -20,4 +20,10 @@ struct monde* monde_new(void);
 struct monde* chargement_monde(struct monde* monde , char* chemin);
 
 struct monde* monde_init(void);
+
+//void recuperation_nom_carte(char * chemin,char * nom_carte, int i);
+
+//char* get_monde_nom_niveau(struct monde* monde);
+
+int get_monde_nombre_carte(struct monde * monde);
  //

@@ -34,7 +34,7 @@ void window_display_image(SDL_Surface* sprite, int x, int y) {
 	SDL_BlitSurface(sprite, NULL, window, &place);
 }
 
-void window_clear() { // Affiche 
+void window_clear() { // Affiche
 	assert(window);
 	SDL_FillRect(window, NULL, SDL_MapRGB(window->format, 255, 255, 255));
 }
